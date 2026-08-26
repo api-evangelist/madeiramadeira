@@ -1,0 +1,347 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  Derived from openapi/madeiramadeira-marketplace-openapi.yml and the response examples published in
+  the provider's own Postman collection
+  (postman/madeiramadeira-marketplace-postman-collection.json). No schema components are published by
+  MadeiraMadeira - the contract carries examples, not JSON Schema - so this graph is reconstructed
+  from documented field tables and example payloads, and confidence is recorded per relationship.
+api: madeiramadeira:marketplace
+schema_source: examples_and_field_tables
+json_schema_published: false
+identifiers:
+  natural_keys:
+  - entity: Produto
+    key: sku
+    scope: seller
+    note: >-
+      Seller-defined. The API enforces the character set - only letters, numbers and underscore are
+      accepted - and max length 30. It is the path identifier on almost every product operation.
+  - entity: Produto
+    key: ean
+    scope: global
+    note: >-
+      GS1 EAN, String(14), required. Used for catalog matching across sellers; a duplicate returns
+      HTTP 422.
+  surrogate_keys:
+  - id_pedido
+  - id_seller
+  - id_categoria
+  - id_callback
+  - id_lancamento_financeiro
+  - id_pedido_item
+  id_style: >-
+    Opaque numeric identifiers returned as JSON STRINGS, not integers (e.g. "id_pedido": "6051652").
+    There is no id prefixing or type discrimination - a client cannot tell an order id from a seller
+    id by looking at it.
+entities:
+- name: Seller
+  description: >-
+    The integrating merchant. Never fetched as a resource - it is the implicit subject of the TOKENMM
+    token and appears only as id_seller on other objects. There is no GET /v1/seller.
+  operations:
+  - PUT /v1/seller/prazo_default/{dias}
+  fields:
+  - id_seller
+  - prazo_default (default expedition lead time in days)
+- name: Produto
+  description: >-
+    A seller's catalog item. Moves through a documented approval pipeline before it is publishable.
+  key: sku
+  operations:
+  - POST /v1/produto
+  - PUT /v1/produto
+  - PUT /v1/produto/bulk
+  - PUT /v1/produto/pendente/bulk
+  - GET /v1/produto/{sku}
+  - GET /v1/produto/sku/skus={SKU1},{SKU2}
+  - DELETE /v1/produto/{sku}
+  - PUT /v1/produto/preco
+  - PUT /v1/produto/estoque
+  - PUT /v1/produto/status
+  - PUT /v1/produto/frete
+  - PUT /v1/produto/frete/sku
+  - PUT /v1/produto/prazo-expedicao
+  required_fields:
+  - id_categoria
+  - nome
+  - descricao
+  - sku
+  - ean
+  - marca
+  - preco_de
+  - preco_por
+  - altura
+  - largura
+  - profundidade
+  - peso
+  - estoque
+  - imagens
+  constraints:
+    nome: String(100)
+    descricao: 'String(10000) - accented characters count as 2'
+    sku: 'String(30), letters/numbers/underscore only'
+    ean: String(14)
+    marca: String(255)
+    preco_por: 'Float(9,2), minimum R$ 30.00'
+    dimensions: 'Float(9,5), packaging dimensions in centimetres'
+    peso: 'Float(10,5), kilograms'
+    imagens: 'Array, minimum 1'
+  embedded:
+  - name: atributos
+    shape: 'array of {nome, valor}'
+    note: Category-specific attribute pairs, free-form.
+- name: ProdutoSituacao
+  description: >-
+    Not a resource but a state machine over Produto, exposed as separate read paths per state. This
+    is the spine of the product lifecycle and the reason the product surface has 30+ operations.
+  states:
+  - aenriquecer (awaiting enrichment - DEPRECATED)
+  - enriquecendo (in enrichment - DEPRECATED)
+  - aprocessar (awaiting processing)
+  - aguardando (awaiting approval)
+  - divergente (match-data divergence)
+  - reprovado (rejected)
+  - naocomercializado (not commercialised)
+  - empublicacao (in publication)
+  - pendentes (aggregate pending)
+  - publicados (aggregate published)
+  status_field:
+    name: status
+    values:
+      1: Ativo
+      0: Inativo
+- name: Categoria
+  description: >-
+    MadeiraMadeira's category tree. Read-only to the seller and the mapping target for a product's
+    id_categoria - a product cannot be submitted without resolving against it first.
+  operations:
+  - GET /v1/categoria/limit={limit}&offset={offset}
+  - GET /v1/categoria/limit={limit}&offset={offset}&nome={nome}
+  key: id_categoria
+- name: Pedido
+  description: A customer order placed on the marketplace containing one or more of the seller's SKUs.
+  key: id_pedido
+  operations:
+  - GET /v1/pedido/id/{id}
+  - GET /v1/pedido/limit={limit}&offset={offset}
+  - GET /v1/pedido/{status}/limit={limit}&offset={offset}
+  - GET /v1/pedido/from={from}&to={to}&limit={limit}&offset={offset}
+  - GET /v1/pedido/new/limit={limit}&offset={offset}
+  - PUT /v1/pedido/received
+  - PUT /v1/pedido/invoiced
+  - PUT /v1/pedido/shipped
+  - PUT /v1/pedido/delivered
+  status_field:
+    name: status
+    values:
+      1: NOVO - placed, payment not yet authorised
+      3: APROVADO - payment authorised
+      2: PROCESSADO - captured by the seller's store
+      6: NF EMITIDA / FATURADO - electronic invoice issued
+      7: ENVIADO - shipped
+      8: ENTREGUE - delivered
+      4: CANCELADO - cancelled (outbound only; never accepted inbound)
+  embedded:
+  - name: skus
+    shape: 'array of order items {sku, skuseller, nome, quantidade, valor_unitario, total, frete, id_pedido_item, madeira_envios}'
+  - name: comprador
+    shape: buyer identity and address
+  - name: dados_entrega
+    shape: delivery address
+  - name: pagamento
+    shape: 'array of {tipo}'
+  - name: faturamento
+    shape: 'array of NF-e records {sku, valor, quantidade, chave_acesso, data_emissao, numero, url}'
+    note: chave_acesso is the 44-digit Brazilian NF-e access key; url points at the SEFAZ NF-e portal.
+  - name: envio
+    shape: 'array of shipment records {sku, quantidade, codigo_rastreio, url_rastreio, nome_transportadora, data_transportadora}'
+  timestamps:
+  - data_criacao
+  - ultima_atualizacao
+  - datahora_aprovacao
+  - datahora_faturamento
+  - datahora_rastreamento
+  - datahora_entrega
+  - datahora_cancelamento
+  - data_previsao_faturamento
+  - data_previsao_entrega
+- name: TabelaFrete
+  description: A seller shipping-rate table. A table named "Contingencia" is mandatory before a store can go live.
+  operations:
+  - GET /v1/frete/limit={limit}&offset={offset}
+  - PUT /v1/produto/frete
+  - PUT /v1/produto/frete/sku
+- name: Callback
+  description: A seller-registered webhook URL, one per event type.
+  key: id_callback
+  operations:
+  - GET /v1/callback
+  - POST /v1/callback
+  - DELETE /v1/callback/{tipo}
+  fields:
+  - id_callback
+  - url
+  - tipo
+  - datahora_alteracao
+  enum_tipo:
+  - FRETE
+  - PEDIDO_NOVO
+  - PEDIDO_APROVADO
+  - PEDIDO_CANCELADO
+  - PRODUTO_APROVADO
+- name: LancamentoFinanceiro
+  description: A financial ledger entry against the seller account - sales, commissions, withdrawals, chargebacks.
+  key: id_lancamento_financeiro
+  operations:
+  - GET /v1/financeiro/lancamento/date_from={date_from}&date_to={date_to}&limit={limit}&offset={offset}&type={type}
+  fields:
+  - id_lancamento_financeiro
+  - id_pedido
+  - id_seller
+  - id_tipo_lancamento
+  - tipo_lancamento
+  - data
+  - descricao
+  - valor
+  - data_previsao_pagamento
+  - data_pagamento
+  - data_liberacao
+  - status
+  - detalhamento
+  quirk: >-
+    detalhamento carries the itemised breakdown as a JSON STRING embedded inside the JSON response,
+    not as a nested array - a consumer must parse JSON twice.
+  enum_tipo_lancamento:
+    1: Estorno
+    2: Venda
+    3: Comissao
+    4: Multa
+    5: Imposto de Renda
+    6: Bonus
+    7: Saque
+    8: Tarifa de Saque
+    9: Outros
+    10: Juridico
+    11: Estorno de Comissao
+    12: Intelipost
+    13: Chargeback
+    14: Pagamento Indevido
+    15: Estorno Parcial
+    16: Frete Madeira Envios
+    17: Frete Complemento
+    18: TAXA FIXA Madeira Envios
+    19: Estorno TAXA FIXA Madeira Envios
+- name: MensageriaSession
+  description: A buyer-seller conversation thread, scoped to an order.
+  operations:
+  - POST /v1/mensageria/session
+  - GET /v1/mensageria/session/{id}
+  - GET /v1/mensageria/seller/historic
+  - GET /v1/mensageria/session/awaiting_answer_seller/count
+- name: MensageriaMessage
+  description: A message within a session.
+  operations:
+  - POST /v1/mensageria/message
+  - GET /v1/mensageria/orders/historic
+- name: MensageriaAnexo
+  description: A file attachment, stored on S3 and addressed by s3_key.
+  operations:
+  - POST /v1/mensageria/uploads
+  - GET /v1/mensageria/uploads/download/{s3_key}
+relationships:
+- from: Produto
+  to: Categoria
+  type: belongs_to
+  via: id_categoria
+  confidence: high
+  evidence: 'Product field table - "ID do de-para de categoria, consultar rota /categoria".'
+- from: Produto
+  to: Seller
+  type: belongs_to
+  via: id_seller
+  confidence: high
+  evidence: PRODUTO_APROVADO callback payload carries id_seller alongside sku.
+- from: Produto
+  to: TabelaFrete
+  type: belongs_to
+  via: shipping table name on the product
+  confidence: high
+  evidence: >-
+    PUT /v1/produto/frete/sku assigns a named table per SKU; the documentation states the seller
+    indicates on the product which table to use.
+- from: Pedido
+  to: Seller
+  type: belongs_to
+  via: id_seller
+  confidence: high
+  evidence: Order example payload.
+- from: Pedido
+  to: Produto
+  type: has_many
+  via: skus[].sku
+  confidence: high
+  evidence: >-
+    Order items carry both sku (MadeiraMadeira catalog SKU) and skuseller (the seller's own code),
+    plus id_pedido_item as the line identifier.
+- from: Pedido
+  to: LancamentoFinanceiro
+  type: has_many
+  via: id_pedido
+  confidence: high
+  evidence: >-
+    Ledger entries carry id_pedido, and the order example carries id_lancamento_financeiro as a
+    back-reference (0 when unsettled).
+- from: LancamentoFinanceiro
+  to: Seller
+  type: belongs_to
+  via: id_seller
+  confidence: high
+  evidence: Ledger example payload.
+- from: LancamentoFinanceiro
+  to: LancamentoFinanceiro
+  type: has_many
+  via: 'detalhamento[].id_lancamento_financeiro'
+  confidence: medium
+  evidence: >-
+    A withdrawal (Saque, type 7) itemises the sale and commission entries it settles. The link is
+    real but is carried inside an embedded JSON string, and pedido_pai / pedido_filho fields suggest a
+    parent/child order relation that is never documented.
+- from: Callback
+  to: Seller
+  type: belongs_to
+  via: token scope
+  confidence: high
+  evidence: Callbacks are listed and created under the authenticated seller's token; no id_seller is passed.
+- from: MensageriaSession
+  to: Pedido
+  type: belongs_to
+  via: order_id
+  confidence: high
+  evidence: 'GET /v1/mensageria/orders/historic?orders={order_id} retrieves messages by order.'
+- from: MensageriaMessage
+  to: MensageriaSession
+  type: belongs_to
+  via: session id
+  confidence: high
+  evidence: Messages are sent into a session created by POST /v1/mensageria/session.
+- from: MensageriaMessage
+  to: MensageriaAnexo
+  type: has_many
+  via: s3_key
+  confidence: medium
+  evidence: >-
+    Uploads return an s3_key that is revalidated for download; the documentation does not show the
+    field that binds an attachment to a message, so the direction is inferred from the surface.
+gaps:
+- >-
+  No JSON Schema, no OpenAPI components and no $ref graph is published by MadeiraMadeira - every
+  shape here is reconstructed from prose field tables and example payloads.
+- >-
+  Numeric identifiers are returned as strings and monetary values are returned inconsistently, as
+  both JSON numbers (order item total 341.91) and strings ("subtotal": "341.91") within the SAME
+  response object.
+- >-
+  Dates use at least three formats in one payload: "2023-09-18 09:06:01", "2023-09-18" and
+  "18/09/2023" (DD/MM/YYYY, in the NF-e block). No timezone is stated anywhere.
+- No Seller read operation exists, so the token holder cannot introspect its own account through the API.

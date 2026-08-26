@@ -1,0 +1,47 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  "Limites de Requisicoes" section of the public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19), plus live unauthenticated response-header
+  inspection on https://marketplace.madeiramadeira.com.br, 2026-08-25.
+api: madeiramadeira:marketplace
+limit_count: 0
+limits: []
+headers: []
+status_on_exhaustion: null
+retry_after: false
+note: >-
+  MadeiraMadeira ACKNOWLEDGES rate limiting but publishes no number, no window, no scope, no response
+  header and no status code, so limit_count is an honest 0. The published text says that consumption
+  of the public endpoints is monitored to prevent abusive and excessive use, and that in extreme cases
+  requests may be "temporarily blocked for a short period" - without defining abusive, the threshold,
+  the block duration, or how a client detects the block. It also states that limits exist on the
+  number of records returned or sent per GET/PUT/POST/DELETE request, again without stating them,
+  although the reference's own examples pin the pagination envelope at limit=100 for product and order
+  listings and limit=100000 for the full category tree.
+observed:
+  probed_url: https://marketplace.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+  status: 401
+  rate_limit_headers_present: false
+  observed_headers:
+  - 'server: nginx'
+  - 'x-powered-by: War-Machine/ERP'
+  note: >-
+    No X-RateLimit-*, RateLimit-*, or Retry-After header was returned. Only unauthenticated responses
+    could be observed; a header could in principle appear on authenticated traffic, but none is
+    documented.
+documented_prose:
+  monitoring: 'Consumption of the public endpoints is monitored to prevent misuse and excessive use.'
+  enforcement: 'In extreme cases of abusive usage patterns, requests may be temporarily blocked for a short period.'
+  record_limits: 'Limits exist on the number of records returned and/or sent per GET/PUT/POST/DELETE request.'
+gaps:
+- No numeric request-per-window limit is published for any scope.
+- No rate-limit response header is documented or observed - a client cannot see its remaining budget.
+- >-
+  No 429 appears in the published error table, and no status code is stated for the temporary block,
+  so a throttled client cannot distinguish throttling from any other failure.
+- No documented Retry-After or backoff guidance.
+- >-
+  Per-request record caps are asserted but never quantified; the only numbers a consumer can infer are
+  the limit values used in the reference's own examples (100 for products and orders, 100000 for the
+  category tree), which are examples rather than stated maxima.

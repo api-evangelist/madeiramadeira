@@ -1,0 +1,141 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  "Callbacks" folder, "Fluxo de Pedido" and "Integracao de Frete" sections of the public Marketplace
+  MadeiraMadeira Postman documentation (https://documenter.getpostman.com/view/3341659/RztmqU19),
+  read 2026-08-25.
+asyncapi_spec: false
+asyncapi_note: >-
+  MadeiraMadeira publishes NO AsyncAPI document, and no /asyncapi.yaml or event-catalog surface exists
+  on any of its hosts (probed 2026-08-25 - the marketplace hosts answer every unknown path with an SPA
+  soft-404). It does, however, publish a real, self-service webhook surface: sellers register their
+  own HTTPS callback URLs through the API itself, and MadeiraMadeira POSTs events to them. That
+  webhook catalogue is captured below and wired as type Webhooks.
+transport: https
+style: seller-registered callback URLs, managed through the API
+registration:
+  list: GET /v1/callback
+  create: POST /v1/callback
+  delete: DELETE /v1/callback/{tipo}
+  update_note: >-
+    There is no update operation. The published guidance is explicit: to change an existing callback
+    you must delete the current one and create it again.
+  create_body:
+    tipo: string (one of the event types below)
+    url: string (the seller's HTTPS endpoint)
+  list_response_shape:
+    meta:
+      count: integer
+    data:
+    - id_callback: string
+      url: string
+      tipo: string
+      datahora_alteracao: 'string (YYYY-MM-DD HH:MM:SS)'
+security_note: >-
+  The documentation describes NO signature, shared secret, HMAC, timestamp, or replay-protection
+  mechanism on inbound callbacks, and no mutual TLS. A seller receiving these events cannot verify
+  they came from MadeiraMadeira from the payload alone. This is a real gap, recorded as measured.
+delivery_note: >-
+  No retry policy, delivery guarantee, ordering guarantee, or dead-letter behaviour is documented for
+  any of the notification callbacks.
+events:
+- name: PEDIDO_NOVO
+  title: New order notification
+  direction: madeiramadeira -> seller
+  method: POST
+  trigger: An order has been placed by a customer (payment not yet authorised, order status 1 NOVO).
+  payload:
+    id_seller: string
+    order: string
+    status: integer
+    time: integer (unix epoch)
+  payload_example:
+    id_seller: '225'
+    order: '2371'
+    status: 1
+    time: 1532567027
+- name: PEDIDO_APROVADO
+  title: Approved order notification
+  direction: madeiramadeira -> seller
+  method: POST
+  trigger: The order's payment has been authorised (order status 3 APROVADO).
+  payload_note: Same envelope as PEDIDO_NOVO, carrying the approved status.
+- name: PEDIDO_CANCELADO
+  title: Cancelled order notification
+  direction: madeiramadeira -> seller
+  method: POST
+  trigger: The order has been cancelled (order status 4 CANCELADO).
+  payload_note: >-
+    Same envelope as PEDIDO_NOVO. The documentation is explicit that CANCELADO is a one-way status -
+    the marketplace never accepts it inbound over the API, it is only ever pushed out to the seller's
+    integrator.
+- name: PRODUTO_APROVADO
+  title: Product approved notification
+  direction: madeiramadeira -> seller
+  method: POST
+  trigger: A submitted product has been approved and published in the catalog.
+  payload:
+    id_seller: integer
+    sku: string
+    aprovado: integer
+  payload_example:
+    id_seller: 456789
+    sku: sku123456
+    aprovado: 1
+- name: FRETE
+  title: Shipping quote request (synchronous seller-hosted callback)
+  direction: madeiramadeira -> seller
+  method: POST
+  kind: request-response
+  trigger: >-
+    A customer is quoting shipping for a cart containing the seller's SKUs and the seller has opted
+    for "Integracao de Frete" (quoting on the seller's own platform) rather than uploading shipping
+    tables to MadeiraMadeira.
+  request_headers:
+    Accept: application/json
+    Content-Type: application/json
+  request_payload:
+    destinationZip: string (customer postal code / CEP)
+    volumes:
+    - sku: string
+      quantity: integer
+  request_example:
+    destinationZip: '80320120'
+    volumes:
+    - sku: '123456'
+      quantity: 1
+  expected_response_payload:
+    shippingQuotes:
+    - shippingCost: number
+      deliveryTime:
+        expedition: integer (business days)
+        transit: integer (business days)
+        total: integer (business days, expedition + transit)
+      shippingEstimatedId: string
+      shippingMethodId: string
+      shippingMethodName: string
+      shippingMethodDisplayName: string
+  expected_response_example:
+    shippingQuotes:
+    - shippingCost: 10.5
+      deliveryTime:
+        expedition: 2
+        transit: 3
+        total: 5
+      shippingEstimatedId: '10203040'
+      shippingMethodId: transportadora
+      shippingMethodName: ENTREGA RAPIDA
+      shippingMethodDisplayName: ERAPIDA
+  expected_response_codes:
+  - status: 200
+    meaning: Quote processed successfully by the seller
+  - status: 404
+    meaning: Seller does not deliver to that region
+  sla:
+    max_response_time_ms: 1500
+    min_availability_percent: 85
+    source: >-
+      Published verbatim by MadeiraMadeira - "O tempo maximo de resposta para o frete sera de 1500 ms"
+      and "A MadeiraMadeira exige um nivel de disponibilidade de 85%", observable in the Seller
+      Dashboard. This is the only quantified SLA MadeiraMadeira publishes, and notably it is an SLA it
+      imposes ON the seller, not one it offers.

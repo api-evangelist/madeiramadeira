@@ -1,0 +1,135 @@
+generated: '2026-08-25'
+method: probed
+source: >-
+  Anonymous HTTPS probes of every /.well-known/ path on each apis.yml baseURL host, each OpenAPI
+  servers[] host, and the public web host, 2026-08-25.
+note: >-
+  NO well-known document is served by MadeiraMadeira. This file records a measured absence, not a
+  presence, and NO WellKnown / SecurityTxt / APICatalog pointer is wired in apis.yml as a result.
+  The marketplace hosts answer HTTP 200 to EVERY /.well-known/* path with an identical 29,937-byte
+  HTML single-page-app shell titled "MadeiraMadeira - Are you lost?" - a soft-404 catch-all, not a
+  document. This was confirmed by fetching a control path
+  (https://marketplace.madeiramadeira.com.br/zzz-nonexistent-path-9f2a), which returned a body with
+  the identical MD5 (664885c8d186fa38db947bc4a6488bff) to the /.well-known/agent-card.json response.
+  Every 200 below is therefore recorded as status_effective soft-404. The public web host
+  www.madeiramadeira.com.br returns honest HTTP 404s.
+hosts:
+- host: marketplace.madeiramadeira.com.br
+  note: Production API host. All /.well-known/* paths return the SPA soft-404 catch-all.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/openid-configuration
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/api-catalog
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/agent-card.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/agent.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+- host: marketplace-sandbox.madeiramadeira.com.br
+  note: Sandbox API host. Same SPA soft-404 catch-all behaviour as production.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/openid-configuration
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/api-catalog
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/agent-card.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+  - path: /.well-known/agent.json
+    status: 404
+    status_raw: 200
+    file: null
+    note: soft-404 SPA shell, not a document
+- host: www.madeiramadeira.com.br
+  note: Public storefront host. Returns honest HTTP 404 on every well-known path.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: api.madeiramadeira.com.br
+  note: >-
+    Resolves in DNS but nginx answers HTTP 403 Forbidden to every path including / - not a
+    documented public API host and not the Marketplace API host.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null

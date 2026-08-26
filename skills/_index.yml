@@ -1,0 +1,58 @@
+generated: '2026-08-25'
+method: generated
+source: >-
+  Authored by API Evangelist from openapi/madeiramadeira-marketplace-openapi.yml (itself derived from
+  MadeiraMadeira's own published Postman collection) plus the conventions, errors, webhooks and
+  reversibility artifacts in this repository. MadeiraMadeira publishes no skills, no AGENTS.md and no
+  agent-facing documentation of its own - searched github.com/madeiramadeirabr, the seller blog and
+  the published reference on 2026-08-25. Every operationId referenced in every skill was verified to
+  exist in the spec.
+api: madeiramadeira:marketplace
+skills:
+- name: madeiramadeira-publish-product
+  file: madeiramadeira-publish-product.md
+  description: >-
+    Resolve a category, submit a product, follow it through the approval pipeline to publication, and
+    understand why it can only be withdrawn while still pending.
+  operation_count: 9
+  write_surface: true
+  irreversible_steps: false
+- name: madeiramadeira-fulfill-order
+  file: madeiramadeira-fulfill-order.md
+  description: >-
+    Read new orders and advance them through received, invoiced (NF-e), shipped and delivered. Every
+    transition is irreversible over the API.
+  operation_count: 10
+  write_surface: true
+  irreversible_steps: true
+- name: madeiramadeira-sync-price-stock
+  file: madeiramadeira-sync-price-stock.md
+  description: >-
+    Keep price, stock, status, shipping tables and expedition lead times in sync, individually or in
+    bulk, with read-before-write discipline because nothing here can be rolled back.
+  operation_count: 13
+  write_surface: true
+  irreversible_steps: true
+- name: madeiramadeira-manage-callbacks
+  file: madeiramadeira-manage-callbacks.md
+  description: >-
+    Register, inspect and replace webhook callbacks for order and product events, and serve the
+    synchronous FRETE shipping-quote callback within its 1500 ms / 85% availability contract.
+  operation_count: 3
+  write_surface: true
+  irreversible_steps: false
+cross_cutting_rules:
+- >-
+  limit and offset are literal PATH segments on this API, not query parameters. Every skill states
+  this because a generated client will get it wrong.
+- >-
+  No write operation is idempotent. There is no Idempotency-Key header. A timed-out write must be
+  resolved by re-reading state, never by blind retry.
+- >-
+  Order status transitions and price/stock/status writes have no reversal operation. Only pending
+  product deletion, callback deletion and Mensageria token revocation can be undone.
+- >-
+  Errors carry no machine-readable code - only an HTTP status and a Portuguese detail string. HTTP 404
+  on the shipping surface means "region not served", not "not found".
+- >-
+  Inbound webhooks are unsigned. Read state back over the authenticated API before acting on an event.

@@ -1,0 +1,33 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  Searched the public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19), the madeiramadeira.zendesk.com help
+  centre, parceiros.madeiramadeira.com.br (the marketplace seller blog) and
+  github.com/madeiramadeirabr on 2026-08-25.
+published: false
+scheme: null
+current_version: v1
+entries: []
+note: >-
+  MadeiraMadeira publishes NO dated changelog or release-notes surface for the Marketplace API. The
+  Postman collection is the only reference and it exposes no version history, no dated entries and no
+  "what changed" section. The one change signal a consumer can read is embedded in the reference
+  itself: the "A Enriquecer / Em Enriquecimento" product-stage endpoints are marked deprecated with no
+  date attached. No ChangeLog pointer is wired in apis.yml, because writing one would assert a surface
+  the provider does not serve. This is a recorded absence, not an unchecked field.
+surfaces_checked:
+- url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  status: 200
+  result: no changelog or version-history section
+- url: https://parceiros.madeiramadeira.com.br/
+  status: 200
+  result: >-
+    "Blog do Marketplace MadeiraMadeira" - a seller-facing marketing/education blog, not an API
+    changelog. No RSS or Atom feed (/feed, /rss, /feed.xml, /rss.xml all HTTP 404); a sitemap.xml is
+    served.
+- url: https://github.com/madeiramadeirabr
+  status: 200
+  result: >-
+    32 public repositories, all internal engineering platform tooling. No repository for the
+    Marketplace API or its documentation, therefore no release history for it.

@@ -1,0 +1,176 @@
+generated: '2026-08-25'
+method: derived
+status: candidate
+source: >-
+  SEARCHED for an official hosted or local MCP server first - github.com/madeiramadeirabr (32 public
+  repos), the npm registry (publisher madeiramadeirabr), packagist (vendor madeiramadeirabr), the
+  published Marketplace documentation, and direct probes of /mcp and /.well-known/* on
+  marketplace.madeiramadeira.com.br, marketplace-sandbox.madeiramadeira.com.br and
+  www.madeiramadeira.com.br on 2026-08-25. Nothing was found. The tools below are DERIVED from
+  operations in openapi/madeiramadeira-marketplace-openapi.yml as a candidate design, and are not
+  offered by MadeiraMadeira.
+api: madeiramadeira:marketplace
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: derived
+  note: >-
+    MadeiraMadeira ships NO MCP server - neither a remote endpoint nor a local stdio package. mode is
+    none and no MCPServer pointer is wired in apis.yml, because a pointer would assert an agent
+    surface the provider does not serve. The auth value records what a server WOULD need (the
+    seller-bound TOKENMM header), not a mechanism anyone has implemented. /mcp returned the SPA
+    soft-404 catch-all on every host probed.
+probes:
+- url: https://marketplace.madeiramadeira.com.br/mcp
+  status: 404
+  status_raw: 200
+  note: SPA soft-404 shell, identical body to a control nonsense path
+- url: https://marketplace-sandbox.madeiramadeira.com.br/mcp
+  status: 404
+  status_raw: 200
+  note: SPA soft-404 shell
+- url: https://www.madeiramadeira.com.br/mcp
+  status: 404
+- registry: npm
+  query: madeiramadeira
+  result: no MCP server package published by MadeiraMadeira
+- registry: github
+  query: github.com/madeiramadeirabr
+  result: 32 public repositories, none an MCP server
+candidate_tools:
+- name: list_categories
+  description: Read the MadeiraMadeira category tree to resolve the id_categoria a product must be filed under.
+  rest:
+  - consultaArvoreDeCategorias
+  - consultaArvoreDeCategoriasPorNome
+  read_only: true
+- name: submit_products
+  description: Submit one or more products to the catalog for analysis and publication.
+  rest:
+  - enviaUmOuMaisProdutos
+  read_only: false
+  destructive: false
+- name: get_product
+  description: Read a single product, or a list of products, by SKU.
+  rest:
+  - buscaUmProdutoPorSku
+  - buscaProdutosPorUmaListaDeSku
+  read_only: true
+- name: list_products_by_state
+  description: >-
+    List products in a given pipeline state - pending, awaiting approval, rejected, divergent, in
+    publication, not commercialised, or published.
+  rest:
+  - buscaTodosOsProdutosPendentes
+  - buscaTodosOsProdutosPublicados
+  - buscaProdutosPorSituacaoLimitEOffset
+  read_only: true
+- name: update_price
+  description: Update the price of one or more SKUs.
+  rest:
+  - atualizaPrecoDeUmOuVariosSkus
+  read_only: false
+  destructive: true
+  reversible: false
+- name: update_stock
+  description: Update available stock for one or more SKUs.
+  rest:
+  - atualizaEstoqueDeUmOuVariosSkus
+  read_only: false
+  destructive: true
+  reversible: false
+- name: update_status
+  description: Activate (1) or deactivate (0) one or more SKUs.
+  rest:
+  - atualizaOStatusDeUmOuVariosSkus
+  read_only: false
+  destructive: true
+  reversible: true
+  reversal_note: Reversible only by issuing the opposite write; there is no undo operation.
+- name: bulk_update_products
+  description: Update price, stock, status, shipping table and shipping dimensions in a single call.
+  rest:
+  - atualizacaoEmMassaDePrecoEstoqueStatusETabelaDeFreteDimensoesDeFrete
+  read_only: false
+  destructive: true
+  reversible: false
+- name: delete_pending_product
+  description: Remove a product that is still in the pending queue.
+  rest:
+  - apagaUmProdutoPendente
+  read_only: false
+  destructive: true
+- name: list_orders
+  description: List orders - all, by status, by date range, or only new ones.
+  rest:
+  - listaDeTodosOsPedidos
+  - listaDePedidosPorStatus
+  - listaTodosOsPedidosEntreDatas
+  - novoConsultaListaDePedidosNovos
+  read_only: true
+- name: get_order
+  description: Read a single order by id, with items, buyer, delivery, invoice and shipment detail.
+  rest:
+  - consultaPedidoPorId
+  read_only: true
+- name: advance_order_status
+  description: >-
+    Notify MadeiraMadeira that orders were received, invoiced, shipped or delivered. One-way - there
+    is no reversal operation for any of these transitions.
+  rest:
+  - recebidoNotificaQueVariosPedidosForamRecebidos
+  - nfEmitidaNotificaQueVariosPedidosTiveramNotaFiscalEmitida
+  - enviadoNotificaQueVariosPedidosForamEnviados
+  - entregueNotificaQueVariosPedidosForamEntregues
+  read_only: false
+  destructive: true
+  reversible: false
+- name: list_shipping_tables
+  description: Read the seller's registered shipping-rate tables.
+  rest:
+  - consultaTabelaDeFreteDoSellerComLimitEOffset
+  read_only: true
+- name: manage_callbacks
+  description: List, create and delete the seller's webhook callback URLs.
+  rest:
+  - consultaUrlsDeCallbackCadastradas
+  - criaNovaUrlDeCallback
+  - deletarUmCallback
+  read_only: false
+  destructive: true
+  reversible: true
+- name: list_financial_entries
+  description: Read financial ledger entries (sales, commissions, withdrawals) for a date range.
+  rest:
+  - consultaLancamentoFinanceiroDeSaqueESeuDetalhamento
+  read_only: true
+- name: list_buyer_messages
+  description: Read buyer-seller message sessions and their history.
+  rest:
+  - historicoDeSessoes
+  - sessaoPorId
+  - mensagensPorOrderId
+  - msgAguardandoResposta
+  read_only: true
+  auth_note: Requires the Mensageria bearer JWT, not the TOKENMM header.
+- name: send_buyer_message
+  description: Send a message to a buyer in a session.
+  rest:
+  - enviarMensagem
+  read_only: false
+  destructive: false
+  reversible: false
+  reversal_note: No delete or recall operation is documented for a sent message.
+agent_readiness_notes:
+- >-
+  An agent implementing these tools must not treat limit/offset as query parameters - they are literal
+  path segments on this API. See conventions/madeiramadeira-conventions.yml.
+- >-
+  No write operation on this API is idempotent and only three have any documented reversal, so an
+  agent must not blind-retry a timed-out write. Order status transitions in particular are a one-way
+  ratchet that can only be corrected by contacting MadeiraMadeira.
+- >-
+  Errors carry no machine-readable code - only an HTTP status and a Portuguese prose detail string.

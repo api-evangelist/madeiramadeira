@@ -1,0 +1,64 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  "Ambientes" section of the public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19), plus a live unauthenticated probe of the
+  sandbox host on 2026-08-25.
+api: madeiramadeira:marketplace
+published: true
+environments:
+- name: Producao
+  role: production
+  base_url: https://marketplace.madeiramadeira.com.br
+  live: true
+  probe:
+    url: https://marketplace.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+    status: 401
+    body: '{"meta":{"count":0},"errors":{"detail":"Token not found"}}'
+    server_header: nginx
+    x_powered_by: War-Machine/ERP
+- name: Sandbox
+  role: sandbox
+  base_url: https://marketplace-sandbox.madeiramadeira.com.br
+  live: true
+  probe:
+    url: https://marketplace-sandbox.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+    status: 401
+    server_header: nginx
+    x_powered_by: PHP/7.4.12
+    note: >-
+      The sandbox is a genuinely separate deployment, not a routing alias - it resolves to a different
+      load balancer (geral-prd-976494375.us-east-2.elb.amazonaws.com) and reports a different
+      x-powered-by than production.
+switching:
+  mechanism: base URL substitution
+  variable: '{{WMENV}}'
+  instruction: >-
+    Published verbatim - "Substituir {{WMENV}} pelo Ambiente desejado" (replace the WMENV variable
+    with the desired environment). The same paths, the same token header and the same payloads are
+    used against either host.
+  key_prefixes: null
+  key_prefix_note: >-
+    There is NO test-mode vs live-mode key prefix convention. Sandbox and production use separate
+    credentials issued separately, so a client distinguishes environments by the base URL alone -
+    there is nothing in the token itself that says which environment it belongs to.
+access:
+  self_service: false
+  gating: >-
+    Sandbox access is NOT self-service. MadeiraMadeira provisions it: the documented onboarding is
+    that after the integrator reviews the documentation, MadeiraMadeira creates a test environment to
+    validate the integration scenarios and issues a sandbox login and password. There is no public
+    signup that yields sandbox credentials, and the production token itself requires a completed
+    seller registration with signed Terms and Conditions.
+  prerequisite: seller registration + signed Terms and Conditions (for production credentials)
+test_data:
+  test_cards: null
+  test_accounts: null
+  fixtures: null
+  triggers: null
+  time_simulation: null
+  note: >-
+    MadeiraMadeira publishes NO test cards, test bank accounts, hosted test tokens, fixture generators,
+    event triggers or test clocks. The sandbox is an isolated environment for exercising the seller's
+    own catalog and order scenarios; there are no published values to seed it with, and none are
+    invented here.

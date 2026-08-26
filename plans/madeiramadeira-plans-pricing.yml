@@ -1,0 +1,46 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  https://www.madeiramadeira.com.br/marketplace (MadeiraMadeira's own "Venda na MadeiraMadeira" seller
+  landing page, HTTP 200) and the public Marketplace MadeiraMadeira Postman documentation, read
+  2026-08-25.
+api: madeiramadeira:marketplace
+plan_count: 0
+plans: []
+model: revenue-share / sales commission
+api_priced_separately: false
+note: >-
+  MadeiraMadeira publishes NO plans, tiers or price list for the Marketplace API, and plan_count is a
+  measured 0 rather than an omission. The API is not a product that is sold - it is the integration
+  channel for the marketplace, and access to it is a consequence of being an approved seller. The
+  commercial model is stated on MadeiraMadeira's own seller page as "Sem custo inicial - Pague apenas
+  comissao sobre as vendas" (no initial cost; pay only commission on sales), with no monthly fee and
+  no subscription. The commission RATE is not published: MadeiraMadeira does not state a percentage,
+  a category schedule, or a fee table on any public page of its own. Third-party integrator blogs
+  circulate a 14-21% by-category range, but that is not a MadeiraMadeira-published figure and it is
+  deliberately NOT recorded here as one.
+commercial_terms_published:
+- term: initial_cost
+  value: none
+  source: https://www.madeiramadeira.com.br/marketplace
+  quote: 'Sem custo inicial - Pague apenas comissao sobre as vendas'
+- term: monthly_fee
+  value: none
+  source: https://www.madeiramadeira.com.br/marketplace
+- term: commission_rate
+  value: null
+  published: false
+  note: Not published by MadeiraMadeira on any public page located during this pass.
+- term: payout_cycle
+  value: >-
+    Payout is released against order delivery, with the value credited automatically to the seller's
+    registered bank account; early settlement of receivables is offered for a fee.
+  source: https://www.madeiramadeira.com.br/marketplace (Perguntas frequentes)
+  note: >-
+    The seller page states the settlement mechanism and that an advance-of-receivables option exists
+    "mediante uma taxa" (for a fee), without stating that fee.
+access_requirements:
+- Possess a CNPJ (Brazilian company registration) with no legal pendencies
+- Mandatory electronic invoice (nota fiscal eletronica) issuance to the customer
+- Approved seller registration and signed Terms and Conditions before an API token is issued
+source_for_requirements: https://www.madeiramadeira.com.br/marketplace

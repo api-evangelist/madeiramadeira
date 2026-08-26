@@ -1,0 +1,174 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the MadeiraMadeira Marketplace API
+  version: 1.0.0
+extends: ../openapi/madeiramadeira-marketplace-openapi.yml
+x-generated: '2026-08-25'
+x-method: generated
+x-source: >-
+  Captures the enhancements API Evangelist applied on top of the contract derived from the provider's
+  own published Postman collection. The original collection is preserved verbatim at
+  postman/madeiramadeira-marketplace-postman-collection.json and is never mutated.
+actions:
+- target: $.info
+  description: >-
+    Record that this OpenAPI is a faithful derivation of a provider-published Postman collection, not
+    a document MadeiraMadeira publishes itself, so a consumer can tell contract from reconstruction.
+  update:
+    x-contract-provenance:
+      provider_published_format: postman-collection-v2.0.0
+      provider_published_url: https://documenter.getpostman.com/view/3341659/RztmqU19
+      derived_by: API Evangelist enrichment pipeline
+      derived_on: '2026-08-25'
+      openapi_published_by_provider: false
+- target: $.info
+  description: Attach the artifact set that documents runtime semantics the contract itself does not carry.
+  update:
+    x-artifacts:
+      errors: ../errors/madeiramadeira-problem-types.yml
+      conventions: ../conventions/madeiramadeira-conventions.yml
+      webhooks: ../asyncapi/madeiramadeira-marketplace-webhooks.yml
+      rate_limits: ../rate-limits/madeiramadeira-rate-limits.yml
+      lifecycle: ../lifecycle/madeiramadeira-lifecycle.yml
+      authentication: ../authentication/madeiramadeira-authentication.yml
+      sandbox: ../sandbox/madeiramadeira-sandbox.yml
+      data_model: ../data-model/madeiramadeira-data-model.yml
+      skills: ../skills/_index.yml
+- target: $.servers
+  description: >-
+    Flag that the sandbox is a separately provisioned environment, not self-service, so a client does
+    not assume it can simply swap the host and start calling.
+  update:
+  - url: https://marketplace.madeiramadeira.com.br
+    description: Producao (production)
+    x-environment: production
+  - url: https://marketplace-sandbox.madeiramadeira.com.br
+    description: Sandbox
+    x-environment: sandbox
+    x-self-service: false
+    x-provisioning: >-
+      MadeiraMadeira creates the test environment and issues a sandbox login and password after
+      reviewing the integrator's plan; sandbox credentials cannot be self-issued.
+- target: $.paths.*.*
+  description: >-
+    Mark every operation with the pagination quirk that will otherwise break generated clients -
+    limit and offset are literal PATH segments on this API, not query parameters.
+  update:
+    x-pagination-style: path-segment-limit-offset
+    x-pagination-note: >-
+      Where a path contains "limit={limit}&offset={offset}", that string is part of the URL PATH.
+      There is no query string. The Mensageria operations are the exception and use conventional
+      query parameters.
+- target: $.paths.*.put
+  description: Record that PUT writes carry no idempotency guarantee, so retries are unsafe.
+  update:
+    x-idempotent: false
+    x-retry-safe: false
+    x-retry-note: >-
+      No Idempotency-Key or equivalent is supported. A timed-out PUT cannot be safely replayed; the
+      client must re-read state to determine whether the write landed.
+- target: $.paths['/v1/pedido/received'].put
+  description: Mark the order lifecycle transitions as irreversible over the API.
+  update:
+    x-reversible: false
+    x-reversal-note: >-
+      Order status is a one-way ratchet. No un-receive operation exists and CANCELADO is never
+      accepted inbound - correcting a wrong transition requires contacting MadeiraMadeira.
+- target: $.paths['/v1/pedido/invoiced'].put
+  description: Mark the invoice transition as irreversible and tie it to the Brazilian NF-e regime.
+  update:
+    x-reversible: false
+    x-domain-standard: nfe
+    x-domain-standard-note: >-
+      "NF EMITIDA" maps to order status 6 and to the issuance of a Brazilian Nota Fiscal Eletronica;
+      the order payload carries the 44-digit NF-e chave_acesso and a SEFAZ portal URL.
+- target: $.paths['/v1/pedido/shipped'].put
+  description: Mark the shipping transition as irreversible.
+  update:
+    x-reversible: false
+- target: $.paths['/v1/pedido/delivered'].put
+  description: Mark the delivery transition as irreversible.
+  update:
+    x-reversible: false
+- target: $.components.securitySchemes.TOKENMM
+  description: Record how the token is obtained and that it carries no expiry or rotation policy.
+  update:
+    x-token-issuance: Portal Marketplace > Administracao > Integracao
+    x-token-prerequisite: Approved seller registration with signed Terms and Conditions
+    x-token-expiry: none documented
+    x-token-rotation: none documented
+    x-token-scopes: none - the token is unscoped and grants the full seller surface
+- target: $.components.schemas
+  description: >-
+    Add the callback (webhook) payload schemas MadeiraMadeira documents in prose but does not carry in
+    the collection, so an agent can validate inbound events.
+  update:
+    OrderCallback:
+      type: object
+      description: Payload POSTed to a seller callback URL for PEDIDO_NOVO, PEDIDO_APROVADO and PEDIDO_CANCELADO.
+      properties:
+        id_seller:
+          type: string
+        order:
+          type: string
+        status:
+          type: integer
+          description: 1 NOVO, 3 APROVADO, 4 CANCELADO
+        time:
+          type: integer
+          description: Unix epoch seconds
+    ProductCallback:
+      type: object
+      description: Payload POSTed to a seller callback URL for PRODUTO_APROVADO.
+      properties:
+        id_seller:
+          type: integer
+        sku:
+          type: string
+        aprovado:
+          type: integer
+    ShippingQuoteRequest:
+      type: object
+      description: Payload MadeiraMadeira POSTs to the seller's FRETE callback to request a shipping quote.
+      properties:
+        destinationZip:
+          type: string
+        volumes:
+          type: array
+          items:
+            type: object
+            properties:
+              sku:
+                type: string
+              quantity:
+                type: integer
+    ShippingQuoteResponse:
+      type: object
+      description: >-
+        Response the seller must return within 1500 ms, at 85% availability, or HTTP 404 when the
+        region is not served.
+      properties:
+        shippingQuotes:
+          type: array
+          items:
+            type: object
+            properties:
+              shippingCost:
+                type: number
+              deliveryTime:
+                type: object
+                properties:
+                  expedition:
+                    type: integer
+                  transit:
+                    type: integer
+                  total:
+                    type: integer
+              shippingEstimatedId:
+                type: string
+              shippingMethodId:
+                type: string
+              shippingMethodName:
+                type: string
+              shippingMethodDisplayName:
+                type: string

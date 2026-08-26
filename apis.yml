@@ -1,18 +1,82 @@
 aid: madeiramadeira
 name: Madeiramadeira
-description: 'Madeiramadeira is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  MadeiraMadeira (MadeiraMadeira Comercio Eletronico S/A, Curitiba, Parana) is one of Brazil's largest
+  online retailers and marketplaces for home goods - furniture, decor, appliances, building materials,
+  bathroom and kitchen fixtures, and planned furniture - selling direct and through a third-party seller
+  marketplace. Its developer surface is the seller-facing Marketplace MadeiraMadeira API: a versioned
+  REST API over HTTPS at marketplace.madeiramadeira.com.br with a matching sandbox host, authenticated
+  with a seller-bound TOKENMM header token issued in the Portal Marketplace. It covers product catalog
+  submission and enrichment lifecycle, the category tree, price, stock and status updates, shipping
+  (frete) tables plus a seller-hosted shipping-quote callback, the full order lifecycle from new through
+  invoiced, shipped and delivered, financial ledger entries, and a JWT-authenticated Mensageria surface
+  for buyer-seller messaging, attachments and tracking updates. Order and product events are delivered
+  to seller-registered callback URLs.
 url: https://raw.githubusercontent.com/api-evangelist/madeiramadeira/refs/heads/main/apis.yml
+image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-25'
 modified: '2026-08-25'
 tags:
 - Company
-apis: []
+- E-Commerce
+- Marketplace
+- Retail
+- Home Goods
+- Furniture
+- Brazil
+- Seller Integration
+- Product Catalog
+- Orders
+- Shipping
+- Logistics
+apis:
+- aid: madeiramadeira:marketplace
+  name: Marketplace MadeiraMadeira API
+  description: >-
+    Seller-facing REST API for the MadeiraMadeira marketplace. Sellers use it to submit and update their
+    product catalog, read the category tree, push price, stock, status and shipping-table changes, read
+    and advance orders through the order lifecycle, query financial ledger entries, register callback
+    URLs for order/product events and seller-hosted shipping quotes, and exchange messages with buyers
+    through the Mensageria surface. Authentication is a seller-bound TOKENMM header token obtained from
+    the Portal Marketplace (Administracao > Integracao); the Mensageria endpoints exchange it for a JWT.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Marketplace
+  - Products
+  - Orders
+  - Shipping
+  - Messaging
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-marketplace-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+  - type: Overlay
+    url: overlays/madeiramadeira-marketplace-overlay.yaml
+  - type: AgentSkill
+    url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +84,64 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.hiive.com/securities/madeiramadeira-stock
+  url: https://www.madeiramadeira.com.br/
+- type: DeveloperPortal
+  url: https://documenter.getpostman.com/view/3341659/RztmqU19
+- type: Documentation
+  url: https://documenter.getpostman.com/view/3341659/RztmqU19
+- type: APIReference
+  url: https://documenter.getpostman.com/view/3341659/RztmqU19
+- type: Postman
+  url: https://documenter.getpostman.com/view/3341659/RztmqU19
+- type: GettingStarted
+  url: https://www.madeiramadeira.com.br/marketplace
+- type: SignUp
+  url: https://www.madeiramadeira.com.br/verificar
+- type: Support
+  url: https://madeiramadeira.zendesk.com/hc/pt-br
+- type: Blog
+  url: https://parceiros.madeiramadeira.com.br/
+- type: GitHubOrganization
+  url: https://github.com/madeiramadeirabr
+- type: TermsOfService
+  url: https://www.madeiramadeira.com.br/termos
+- type: PrivacyPolicy
+  url: https://www.madeiramadeira.com.br/termos-e-privacidade
+- type: Plans
+  url: plans/madeiramadeira-plans-pricing.yml
+- type: Lifecycle
+  url: lifecycle/madeiramadeira-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/madeiramadeira-lifecycle.yml
+- type: Conformance
+  url: conformance/madeiramadeira-conformance.yml
+- type: DomainSecurity
+  url: security/madeiramadeira-domain-security.yml
+- type: Packages
+  url: packages/madeiramadeira-packages.yml
+- type: LLMsTxt
+  url: llms/madeiramadeira-llms.txt
+x-enrichment:
+  date: '2026-08-25'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: contract-published
+  detail: >-
+    MadeiraMadeira publishes a real first-party machine-readable contract for its seller Marketplace
+    API as a Postman collection (69 requests) at documenter.getpostman.com/view/3341659/RztmqU19,
+    retrievable as JSON and served against its own hosts marketplace.madeiramadeira.com.br and
+    marketplace-sandbox.madeiramadeira.com.br, both of which answered a live unauthenticated probe with
+    HTTP 401 and the documented error envelope.
+  evidence:
+  - url: https://documenter.gw.postman.com/api/collections/3341659/RztmqU19
+    status: 200
+  - url: https://marketplace.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+    status: 401
+  - url: https://marketplace-sandbox.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+    status: 401
+  - url: https://www.madeiramadeira.com.br/marketplace
+    status: 200
+  checked: '2026-08-25'

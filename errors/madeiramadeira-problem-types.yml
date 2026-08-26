@@ -1,0 +1,86 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  "Codigos de erros" section of the public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19), plus a live unauthenticated probe of
+  https://marketplace.madeiramadeira.com.br/v1/categoria/limit=1&offset=0 on 2026-08-25 which
+  returned HTTP 401 with the envelope below.
+format: vendor-json
+rfc9457: false
+note: >-
+  MadeiraMadeira does NOT use RFC 9457 problem+json. Errors are returned as application/json in a
+  vendor envelope with a meta object and an errors object carrying a single human-readable detail
+  string. There is no machine-readable error code, type URI, or instance identifier in the payload -
+  the HTTP status is the only machine-discriminable signal, so a client cannot distinguish two
+  different 400 causes without parsing Portuguese prose.
+envelope:
+  content_type: application/json
+  shape:
+    meta:
+      count: integer
+    errors:
+      detail: string (human-readable, Portuguese)
+  observed_example:
+    meta:
+      count: 0
+    errors:
+      detail: Token not found
+  observed_on: https://marketplace.madeiramadeira.com.br/v1/categoria/limit=1&offset=0
+  observed_status: 401
+problem_types:
+- status: 400
+  title: Erro no JSON enviado
+  title_en: Malformed JSON in the request
+  remediation: Verify the request body structure against the documented product/order schema and resend.
+  source: published error table
+- status: 401
+  title: Ausencia de um dos Tokens no header ou token nao existe
+  title_en: A required token is missing from the header, or the token does not exist
+  remediation: >-
+    Send the TOKENMM header on every request. The token is issued in the Portal Marketplace under
+    Administracao > Integracao and requires a completed seller registration with signed Terms and
+    Conditions.
+  observed: true
+  observed_detail: Token not found
+  source: published error table + live probe
+- status: 403
+  title: Token revogado ou invalido
+  title_en: Token revoked or invalid
+  remediation: Reissue the seller token from the Portal Marketplace (Administracao > Integracao).
+  source: published error table
+- status: 404
+  title: Desculpe nao atendemos sua regiao
+  title_en: Sorry, we do not serve your region
+  remediation: >-
+    Returned on the shipping (frete) surface when the seller does not serve the quoted destination
+    region. Not a generic not-found - MadeiraMadeira overloads 404 for shipping-coverage refusal, and
+    the seller-hosted shipping callback is expected to return 404 for the same condition.
+  source: published error table + shipping callback contract
+- status: 405
+  title: Metodo de requisicao invalido
+  title_en: Invalid request method
+  remediation: The endpoint does not accept the HTTP method used. Check the operation in the reference.
+  source: published error table
+- status: 422
+  title: Produto com este EAN ou SKU ja cadastrado para ser processado
+  title_en: A product with this EAN or SKU is already queued for processing
+  remediation: >-
+    The natural key (EAN or SKU) is already in the pending queue. Poll the pending-product endpoints
+    (/v1/produto/situacao/pendentes/...) before resubmitting rather than retrying the POST.
+  source: published error table
+- status: 500
+  title: Erro interno de servidor
+  title_en: Internal server error
+  remediation: Contact MadeiraMadeira support; the published guidance is to open a ticket with their team.
+  source: published error table
+gaps:
+- >-
+  No 429 is documented. The documentation states that abusive usage patterns can cause requests to be
+  "temporarily blocked", but does not say what status that block returns, so a client cannot
+  distinguish throttling from any other failure.
+- >-
+  No machine-readable error code field. Two different 400 conditions are indistinguishable except by
+  reading the Portuguese detail string.
+- >-
+  Only 401 has a documented response example in the collection (on the Mensageria token endpoint);
+  the remaining statuses are declared in a prose table only.

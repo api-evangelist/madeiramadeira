@@ -1,0 +1,91 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  Public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19), derivation from
+  openapi/madeiramadeira-marketplace-openapi.yml, and host probes on 2026-08-25.
+api: madeiramadeira:marketplace
+versioning:
+  scheme: URI path prefix
+  current_version: v1
+  versions_published:
+  - v1
+  policy_published: false
+  note: >-
+    Every operation sits under /v1. MadeiraMadeira publishes no versioning policy - no statement of
+    how a v2 would be introduced, how long v1 would be supported, or what constitutes a breaking
+    change. There is no version header and no content negotiation.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecations_announced: true
+  note: >-
+    There is no written deprecation POLICY, but MadeiraMadeira does announce deprecations in place in
+    the reference, which is why a Deprecation pointer is wired. The announcement carries no date and
+    no removal deadline - the published wording is "foram depreciados. Em breve, serao removidos da
+    API" (deprecated; will soon be removed) - so an integrator cannot plan a migration against it.
+    Neither RFC 8594 Sunset nor a Deprecation header is served.
+  deprecated_operations:
+  - path: /v1/produto/aenriquecer/{sku}
+    operationId: buscaUmProdutoQueEstaAguardandoEnriquecimentoPeloSeuSku
+    stage: Aguardando enriquecimento
+  - path: /v1/produto/aenriquecer/limit={limit}&offset={offset}
+    operationId: buscaProdutosAguardandoEnriquecimentoComLimitEOffset
+    stage: Aguardando enriquecimento
+  - path: /v1/produto/enriquecendo/{sku}
+    operationId: buscaUmProdutoQueEstaEmEnriquecimentoPeloSeuSku
+    stage: Em enriquecimento
+  - path: /v1/produto/enriquecendo/limit={limit}&offset={offset}
+    operationId: buscaProdutosEmEnriquecimentoComLimitEOffset
+    stage: Em enriquecimento
+  deprecated_count: 4
+  removal_date: null
+status_page:
+  published: false
+  probed:
+  - url: https://status.madeiramadeira.com.br/
+    result: does not resolve (DNS NXDOMAIN)
+  note: >-
+    No status page, uptime dashboard or incident history is published for the Marketplace API. The
+    only availability instrument in the documentation runs the other way: MadeiraMadeira requires 85%
+    availability and a 1500 ms maximum response time FROM the seller's own shipping-quote endpoint,
+    measurable by the seller in the Seller Dashboard. MadeiraMadeira publishes no reciprocal
+    commitment for its own API. No StatusPage pointer is wired as a result.
+sla:
+  provider_sla_published: false
+  seller_obligation:
+    min_availability_percent: 85
+    max_response_time_ms: 1500
+    applies_to: the seller-hosted FRETE shipping-quote callback
+    observable_at: Seller Dashboard
+changelog:
+  published: false
+  note: >-
+    No dated changelog or release-notes surface is published for the API. The Postman collection is
+    the reference and it carries no version history a consumer can read. See
+    changelog/madeiramadeira-changelog.yml.
+support:
+  channel: https://madeiramadeira.zendesk.com/hc/pt-br
+  note: >-
+    Zendesk help centre with a dedicated marketplace-integration category. Returns HTTP 403 to
+    automated clients behind a Cloudflare managed challenge; the articles are publicly indexed and
+    human-reachable, so this is a bot challenge and not a dead page.
+domain_lifecycle:
+  hosts:
+  - host: marketplace.madeiramadeira.com.br
+    role: production
+    live: true
+    cname: war-machine.madeiramadeira.com.br
+  - host: marketplace-sandbox.madeiramadeira.com.br
+    role: sandbox
+    live: true
+  - host: api.madeiramadeira.com.br
+    role: unknown
+    live: false
+    note: Resolves but nginx returns HTTP 403 Forbidden on every path; not a documented public surface.
+  - host: developers.madeiramadeira.com.br
+    role: none
+    live: false
+    note: Does not resolve. There is no developer-portal subdomain.

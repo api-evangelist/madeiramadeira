@@ -1,0 +1,132 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  Derived from openapi/madeiramadeira-marketplace-openapi.yml and the published Marketplace
+  MadeiraMadeira documentation (https://documenter.getpostman.com/view/3341659/RztmqU19); trust and
+  compliance surfaces probed on madeiramadeira.com.br, 2026-08-25.
+api: madeiramadeira:marketplace
+standards:
+- id: openapi
+  conforms: true
+  version: 3.1.0
+  evidence: >-
+    openapi/madeiramadeira-marketplace-openapi.yml - 67 operations across 64 paths, derived faithfully
+    from the provider's own published Postman collection. MadeiraMadeira itself publishes the contract
+    as a Postman collection (schema v2.0.0), not as OpenAPI.
+  provider_published: false
+- id: postman-collection
+  conforms: true
+  version: '2.0.0'
+  evidence: >-
+    Provider-published Postman collection, retrievable as JSON from
+    documenter.gw.postman.com/api/collections/3341659/RztmqU19 (saved verbatim to
+    postman/madeiramadeira-marketplace-postman-collection.json). This is MadeiraMadeira's real,
+    first-party machine-readable contract.
+  provider_published: true
+- id: rest
+  conforms: true
+  evidence: >-
+    Resource-oriented HTTPS API with JSON payloads and conventional method semantics (GET read, POST
+    create, PUT update, DELETE remove) under a /v1 path prefix.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors are application/json in a vendor {meta, errors:{detail}} envelope, not
+    application/problem+json. No type, title, status, detail or instance members.
+    See errors/madeiramadeira-problem-types.yml.
+- id: pagination
+  conforms: false
+  evidence: >-
+    limit/offset pagination exists but is encoded as literal PATH SEGMENTS
+    (/v1/produto/limit={limit}&offset={offset}) rather than query parameters, which conforms to no
+    common convention and breaks generated clients. The Mensageria surface uses conventional query
+    parameters, so the API is internally inconsistent.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header or equivalent on any write operation. Natural-key deduplication on
+    product creation (HTTP 422 on duplicate EAN/SKU) is the only replay guard.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth 2.0. The primary scheme is a static API key in a custom TOKENMM header. The Mensageria
+    surface issues a bearer JWT through Keycloak, but the exchange is a proprietary
+    generate-token/revoke-token pair, not an RFC 6749 grant, and no authorization-server metadata is
+    served (/.well-known/oauth-authorization-server soft-404s).
+- id: oidc
+  conforms: false
+  evidence: '/.well-known/openid-configuration returns the SPA soft-404 shell on every host.'
+- id: rfc8594
+  conforms: false
+  evidence: >-
+    Four operations are marked deprecated in the reference, but no Sunset or Deprecation response
+    header is served and no removal date is published.
+- id: webhooks
+  conforms: true
+  evidence: >-
+    Seller-registered callback URLs managed through the API itself (GET/POST/DELETE /v1/callback) with
+    five documented event types. See asyncapi/madeiramadeira-marketplace-webhooks.yml. No signature or
+    shared-secret verification is documented.
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI document is published, and no /asyncapi.yaml exists on any host.
+- id: json-api
+  conforms: false
+  evidence: >-
+    The response envelope uses a {meta, data} shape reminiscent of JSON:API, but there is no
+    application/vnd.api+json media type, no type/id resource objects, no links and no relationships.
+    Surface resemblance only.
+domain_standards:
+- id: nfe
+  name: NF-e (Nota Fiscal Eletronica, Brazilian electronic invoice, SEFAZ)
+  conforms: true
+  reward_only: true
+  evidence: >-
+    The order lifecycle is built around Brazil's electronic invoicing regime, not around a generic
+    "invoiced" flag. PUT /v1/pedido/invoiced is documented as "NF EMITIDA" and maps to order status 6
+    (NF EMITIDA - FATURADO), the marketplace requires nota fiscal eletronica issuance as a condition
+    of selling, and the reference's own examples carry NF-e artefacts - a linkdanfe.com.br DANFE link
+    and a reference to www.nfe.fazenda.gov.br, the federal NF-e portal. An integrator that already
+    speaks NF-e maps to this order flow with no bespoke connector.
+  spec_location: >-
+    PUT /v1/pedido/invoiced (operationId nfEmitidaNotificaQueVariosPedidosTiveramNotaFiscalEmitida) and
+    the "Status do pedido" table in the published order-flow documentation.
+- id: ean-gtin
+  name: EAN / GTIN product identification (GS1)
+  conforms: true
+  reward_only: true
+  evidence: >-
+    EAN is a REQUIRED field on every product submission (String(14)), and it is a natural key the API
+    enforces - POST /v1/produto returns HTTP 422 when the EAN is already registered. Catalog matching
+    across sellers is done on it.
+  spec_location: 'Product structure table, field "ean" (obrigatorio, String(14)); HTTP 422 in the error table.'
+- id: cep-correios
+  name: CEP (Brazilian postal code) shipping addressing
+  conforms: true
+  reward_only: true
+  evidence: >-
+    The shipping-quote callback contract is keyed on destinationZip (CEP), and the reference's order
+    examples carry Correios tracking links (rastreio.correios.com.br / track.correios.com.br).
+  spec_location: 'FRETE callback payload {destinationZip, volumes[]}; order tracking examples.'
+- id: openrtb
+  conforms: false
+  applicable: false
+  evidence: Not an advertising API. Recorded to show the domain-standard shortlist was checked, not to penalise.
+- id: scim
+  conforms: false
+  applicable: false
+  evidence: No identity-provisioning surface.
+- id: odata
+  conforms: false
+  applicable: false
+  evidence: No $metadata surface.
+compliance:
+  certifications_published: []
+  trust_center: false
+  note: >-
+    No SOC 2, ISO 27001, PCI DSS or equivalent certification is published on any MadeiraMadeira public
+    surface, and no trust centre exists (probe-security-programs.py returned vdp=none trust=none on
+    2026-08-25). MadeiraMadeira does publish a Privacy Policy at
+    https://www.madeiramadeira.com.br/termos-e-privacidade, which is a Brazilian consumer-retail LGPD
+    document rather than a security-compliance programme. NO Compliance pointer is wired in apis.yml,
+    because none of the above is a published compliance programme.

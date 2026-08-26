@@ -1,0 +1,26 @@
+generated: '2026-08-25'
+method: derived
+source: openapi/madeiramadeira-marketplace-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: TOKENMM
+  type: apiKey
+  in: header
+  parameter: TOKENMM
+  description: Seller token issued in the Portal Marketplace under Administracao > Integracao.
+    Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+  sources:
+  - openapi/madeiramadeira-marketplace-openapi.yml
+- name: BearerJWT
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token)
+    via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.
+  sources:
+  - openapi/madeiramadeira-marketplace-openapi.yml

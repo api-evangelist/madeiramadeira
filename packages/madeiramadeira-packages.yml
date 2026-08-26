@@ -1,0 +1,105 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  npm registry search + registry.npmjs.org metadata, packagist.org / repo.packagist.org metadata,
+  pypi.org, rubygems.org, and the github.com/madeiramadeirabr organisation, probed 2026-08-25.
+summary: >-
+  MadeiraMadeira publishes NO first-party client SDK for the Marketplace API in any public package
+  registry. The organisation does publish first-party packages (npm scope-less mm-* loggers, the
+  @cavilha design-system, and Composer packages under the madeiramadeirabr vendor), but every one of
+  them is internal engineering tooling - loggers, an AWS Secrets Manager helper, an observer utility,
+  a web-store theme - and none of them wraps the public Marketplace API. The only package that is a
+  Marketplace API client is third-party, published by the Magazord e-commerce platform, and it has
+  never cut a tagged release.
+official_sdk_count: 0
+packages:
+- language: php
+  registry: packagist
+  name: magazord-plataforma/madeira-madeira-marketplace
+  url: https://packagist.org/packages/magazord-plataforma/madeira-madeira-marketplace
+  source: https://github.com/magazord-plataforma/madeira-madeira-marketplace
+  install: composer require magazord-plataforma/madeira-madeira-marketplace
+  official: false
+  wraps_api: madeiramadeira:marketplace
+  version: null
+  published: null
+  note: >-
+    THIRD-PARTY. Published by Magazord (a Brazilian e-commerce platform vendor), not by
+    MadeiraMadeira. This is the only public package that is a client for the Marketplace API.
+    Packagist reports 8,692 total installs and first submission 2018-03-27, but the package has
+    ZERO tagged releases - the versions map contains only dev branches - so there is no published
+    version or release date to record. A consumer installing it gets an untagged development branch,
+    which is why version and published are null rather than a guess.
+- language: php
+  registry: packagist
+  name: madeiramadeirabr/hagrid
+  url: https://packagist.org/packages/madeiramadeirabr/hagrid
+  source: https://github.com/madeiramadeirabr/hagrid
+  install: composer require madeiramadeirabr/hagrid
+  official: true
+  wraps_api: null
+  version: v1.2.002
+  published: '2021-08-16'
+  note: >-
+    First-party but NOT an API client - "Simplified integration with AWS Secrets Manager", internal
+    engineering tooling. Last release 2021-08-16.
+- language: php
+  registry: packagist
+  name: madeiramadeirabr/event-observer
+  url: https://packagist.org/packages/madeiramadeirabr/event-observer
+  install: composer require madeiramadeirabr/event-observer
+  official: true
+  wraps_api: null
+  version: 1.1.3
+  published: '2019-08-16'
+  note: First-party but NOT an API client - an observer-pattern utility library. Last release 2019-08-16.
+- language: javascript
+  registry: npm
+  name: mm-nodejs-logger
+  url: https://www.npmjs.com/package/mm-nodejs-logger
+  source: https://github.com/madeiramadeirabr/node-js-logger
+  install: npm install mm-nodejs-logger
+  official: true
+  wraps_api: null
+  version: 0.1.6
+  published: '2023-04-20'
+  note: First-party but NOT an API client - a structured-logging library. Last release 2023-04-20.
+- language: javascript
+  registry: npm
+  name: mm-nestjs-logger
+  url: https://www.npmjs.com/package/mm-nestjs-logger
+  source: https://github.com/madeiramadeirabr/nest-js-logger
+  install: npm install mm-nestjs-logger
+  official: true
+  wraps_api: null
+  version: 0.0.5
+  published: '2023-04-20'
+  note: First-party but NOT an API client - a NestJS logging library. Last release 2023-04-20.
+- language: javascript
+  registry: npm
+  name: '@cavilha/theme'
+  url: https://www.npmjs.com/package/@cavilha/theme
+  source: https://github.com/madeiramadeirabr/cavilha-ui
+  install: npm install @cavilha/theme
+  official: true
+  wraps_api: null
+  version: 1.0.1
+  published: '2023-05-04'
+  note: >-
+    First-party but NOT an API client - the theme provider for Cavilha, MadeiraMadeira's own web-store
+    design system. Last release 2023-05-04.
+registries_checked:
+- registry: npm
+  result: 'first-party packages found under publisher madeiramadeirabr; none is a Marketplace API client'
+- registry: packagist
+  result: 'first-party vendor madeiramadeirabr found; only Marketplace API client is third-party (magazord-plataforma)'
+- registry: pypi
+  result: 'no package (pypi.org/pypi/madeiramadeira/json -> HTTP 404)'
+- registry: rubygems
+  result: 'no package (search returned [])'
+- registry: github
+  result: >-
+    github.com/madeiramadeirabr is the real organisation (32 public repos, "Madeira Madeira",
+    ti@madeiramadeira.com.br). Contents are engineering platform tooling - GitHub Actions, service
+    boilerplate templates, loggers, health-check libs, OpenTelemetry helpers. No Marketplace API SDK.
+    github.com/madeira-madeira also exists but is an empty shell (0 public repos, created 2019).

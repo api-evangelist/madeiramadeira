@@ -1,0 +1,185 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  Public Marketplace MadeiraMadeira Postman documentation
+  (https://documenter.getpostman.com/view/3341659/RztmqU19) plus derivation from
+  openapi/madeiramadeira-marketplace-openapi.yml and a live unauthenticated probe of the production
+  host, 2026-08-25.
+api: madeiramadeira:marketplace
+authentication:
+  style: static API key in a custom header
+  header: TOKENMM
+  companion_header: 'Content-Type: application/json (documented as required alongside the token)'
+  issuance: Portal Marketplace > Administracao > Integracao
+  binding: Bound to the seller account; requires completed registration and signed Terms and Conditions.
+  second_scheme:
+    surface: Mensageria (buyer-seller messaging)
+    style: bearer JWT
+    exchange: POST /v1/mensageria/auth/generate-token with the MMTOKEN header, brokered through Keycloak
+    revoke: POST /v1/mensageria/auth/revoke-token
+    token_type: Bearer
+    expires_in_seconds: 3600
+    note: >-
+      The Mensageria surface is the only part of the API with token expiry and explicit revocation.
+      The rest of the API uses a long-lived static token with no documented rotation or expiry policy.
+  see: authentication/madeiramadeira-authentication.yml
+pagination:
+  style: limit/offset encoded as PATH SEGMENTS, not query parameters
+  params:
+  - limit
+  - offset
+  form: /v1/produto/limit={limit}&offset={offset}
+  note: >-
+    This is the single most unusual convention in the API and it will break naive HTTP clients and
+    every code generator that assumes limit/offset are query parameters. The literal string
+    "limit=100&offset=0" is part of the URL PATH - there is no "?" in these URLs. The Mensageria
+    surface is the one exception: it uses conventional query parameters (?page=1&limit=20&status=2),
+    so the API carries two mutually incompatible pagination conventions at once.
+  mensageria_style: conventional query string with page/limit
+  response_count_field: meta.count
+  total_pages_field: null
+  cursor: false
+response_envelope:
+  success:
+    meta:
+      count: integer
+    data: array or object
+  error:
+    meta:
+      count: integer
+    errors:
+      detail: string
+  note: Both success and error responses share the meta wrapper; data vs errors discriminates them.
+  see: errors/madeiramadeira-problem-types.yml
+versioning:
+  style: URI path prefix
+  current: v1
+  location: first path segment on every operation
+  content_negotiation: false
+  header_versioning: false
+  see: lifecycle/madeiramadeira-lifecycle.yml
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  note: >-
+    NO idempotency key mechanism of any kind is documented - no Idempotency-Key header, no request
+    identifier, no replay window. What the API does have is NATURAL-KEY DEDUPLICATION on product
+    creation: POST /v1/produto returns HTTP 422 "Produto com este EAN ou SKU ja cadastrado para ser
+    processado" when the EAN or SKU is already queued, which makes a duplicated product submission
+    fail loudly rather than create a duplicate. That is a useful guard but it is not idempotency - it
+    protects one resource on one operation, it returns an error rather than the original result, and
+    it does nothing for the bulk price/stock/status PUT operations, the order status transitions, or
+    callback registration. An agent retrying a timed-out PUT /v1/produto/bulk has no safe way to know
+    whether the first attempt landed.
+  bulk_writes_affected:
+  - PUT /v1/produto/bulk
+  - PUT /v1/produto/pendente/bulk
+  - PUT /v1/produto/preco
+  - PUT /v1/produto/estoque
+  - PUT /v1/produto/status
+request_tracing:
+  request_id_header: null
+  correlation_id: null
+  note: >-
+    No request-id or correlation-id header is documented, and none was returned on the live
+    unauthenticated probe. Observed response headers were limited to server: nginx and
+    x-powered-by: War-Machine/ERP (production) / PHP/7.4.12 (sandbox). A seller cannot quote a request
+    identifier when opening a support ticket.
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  note: >-
+    Limits are acknowledged in prose but no header, no numeric limit and no status code are published.
+  see: rate-limits/madeiramadeira-rate-limits.yml
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  custom_metadata_fields: false
+  note: >-
+    Products carry an open "atributos" array of {nome, valor} pairs, which is category-specific
+    attribute data rather than seller-defined metadata.
+bulk_operations:
+  supported: true
+  operations:
+  - PUT /v1/produto/bulk (price, stock, status, shipping table and shipping dimensions in one call)
+  - PUT /v1/produto/pendente/bulk (price, stock and shipping for products still pending)
+  - PUT /v1/pedido/received, /invoiced, /shipped, /delivered (each accepts multiple orders)
+  note: >-
+    Bulk is a first-class pattern here - order status transitions are bulk-only by design. No
+    per-item result array or partial-failure contract is documented, so a client cannot tell which
+    items in a bulk call succeeded.
+reversibility:
+  grade: na
+  write_surface: true
+  assessment: >-
+    The Marketplace API has a substantial write surface but publishes NO reversal operation and NO
+    reversal window for any of it, so reversibility is recorded as absent rather than graded. This is
+    not a read-only API being excused - it is a write-heavy API with no documented undo.
+  reversal_operations:
+  - surface: Pending product submission
+    reversal: DELETE /v1/produto/{sku}
+    operationId: apagaUmProdutoPendente
+    window: null
+    window_documented: false
+    note: >-
+      The one true delete in the API, and it only reaches products still in the PENDING queue. The
+      documentation states no window and no condition under which it stops working. Nothing reverses
+      a product once it has been approved and published.
+  - surface: Callback registration
+    reversal: DELETE /v1/callback/{tipo}
+    operationId: deletarUmCallback
+    window: none required
+    window_documented: true
+    note: >-
+      Fully reversible and effectively the documented update mechanism - MadeiraMadeira explicitly
+      instructs sellers to delete and recreate a callback in order to change it.
+  - surface: Mensageria token
+    reversal: POST /v1/mensageria/auth/revoke-token
+    operationId: revogarToken
+    window: 'token lifetime (expires_in 3600 seconds)'
+    window_documented: true
+    note: A real revocation path with a stated lifetime - the best-documented reversal in the API.
+  non_reversible:
+  - surface: Order lifecycle transitions
+    operations:
+    - PUT /v1/pedido/received
+    - PUT /v1/pedido/invoiced
+    - PUT /v1/pedido/shipped
+    - PUT /v1/pedido/delivered
+    note: >-
+      Order status is a one-way ratchet over the API. There is no un-invoice, un-ship or un-deliver
+      operation, and the documentation states plainly that the CANCELADO status is NEVER accepted
+      inbound - the marketplace only ever sends it outward. Reversing an order therefore requires
+      contacting MadeiraMadeira; the published order-flow diagram labels those paths as "possible
+      through contact and intermediation of MadeiraMadeira", i.e. a human process, not an API call.
+      An agent that marks an order delivered in error cannot correct it programmatically.
+  - surface: Price, stock and status updates
+    operations:
+    - PUT /v1/produto/preco
+    - PUT /v1/produto/estoque
+    - PUT /v1/produto/status
+    - PUT /v1/produto/bulk
+    note: >-
+      Last-write-wins overwrites with no versioning, no prior-value return and no rollback. Setting
+      status to 0 (Inativo) is the nearest thing to an undo for a publish, and it is a new write, not
+      a reversal. There is no way to read back what a field was before the call.
+  - surface: Published products
+    note: >-
+      DELETE /v1/produto/{sku} is documented only for PENDING products. No delist, unpublish or
+      withdraw operation is documented for an approved and published product.
+dry_run_mode:
+  supported: false
+  note: >-
+    No dry-run, validate-only or preview parameter is documented on any write operation. The sandbox
+    host (marketplace-sandbox.madeiramadeira.com.br) is the only rehearsal mechanism, and it requires
+    MadeiraMadeira to provision a separate test seller account first.
+  see: sandbox/madeiramadeira-sandbox.yml
+cross_links:
+  errors: errors/madeiramadeira-problem-types.yml
+  lifecycle: lifecycle/madeiramadeira-lifecycle.yml
+  authentication: authentication/madeiramadeira-authentication.yml
+  rate_limits: rate-limits/madeiramadeira-rate-limits.yml
+  webhooks: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  sandbox: sandbox/madeiramadeira-sandbox.yml
