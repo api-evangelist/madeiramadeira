@@ -33,26 +33,16 @@ tags:
 - Shipping
 - Logistics
 apis:
-- aid: madeiramadeira:marketplace
-  name: Marketplace MadeiraMadeira API
-  description: >-
-    Seller-facing REST API for the MadeiraMadeira marketplace. Sellers use it to submit and update their
-    product catalog, read the category tree, push price, stock, status and shipping-table changes, read
-    and advance orders through the order lifecycle, query financial ledger entries, register callback
-    URLs for order/product events and seller-hosted shipping quotes, and exchange messages with buyers
-    through the Mensageria surface. Authentication is a seller-bound TOKENMM header token obtained from
-    the Portal Marketplace (Administracao > Integracao); the Mensageria endpoints exchange it for a JWT.
+- aid: madeiramadeira:madeiramadeira-callbacks-api
+  name: Madeiramadeira Callbacks API
+  description: The Callbacks API from Madeiramadeira — 2 operation(s) for callbacks.
   humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
   baseURL: https://marketplace.madeiramadeira.com.br
   tags:
-  - Marketplace
-  - Products
-  - Orders
-  - Shipping
-  - Messaging
+  - Callbacks
   properties:
   - type: OpenAPI
-    url: openapi/madeiramadeira-marketplace-openapi.yml
+    url: openapi/madeiramadeira-callbacks-api-openapi.yml
   - type: Postman
     url: https://documenter.getpostman.com/view/3341659/RztmqU19
   - type: Documentation
@@ -73,16 +63,196 @@ apis:
     url: sandbox/madeiramadeira-sandbox.yml
   - type: DataModel
     url: data-model/madeiramadeira-data-model.yml
-  - type: Overlay
-    url: overlays/madeiramadeira-marketplace-overlay.yaml
-  - type: AgentSkill
-    url: skills/_index.yml
+- aid: madeiramadeira:madeiramadeira-categorias-api
+  name: Madeiramadeira Categorias API
+  description: The Categorias API from Madeiramadeira — 1 operation(s) for categorias.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Categorias
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-categorias-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+- aid: madeiramadeira:madeiramadeira-financeiro-api
+  name: Madeiramadeira Financeiro API
+  description: The Financeiro API from Madeiramadeira — 1 operation(s) for financeiro.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Financeiro
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-financeiro-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+- aid: madeiramadeira:madeiramadeira-frete-api
+  name: Madeiramadeira Frete API
+  description: The Frete API from Madeiramadeira — 1 operation(s) for frete.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Frete
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-frete-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+- aid: madeiramadeira:madeiramadeira-mensageria-api
+  name: Madeiramadeira Mensageria API
+  description: The Mensageria API from Madeiramadeira — 12 operation(s) for mensageria.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Mensageria
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-mensageria-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+- aid: madeiramadeira:madeiramadeira-pedido-api
+  name: Madeiramadeira Pedido API
+  description: The Pedido API from Madeiramadeira — 9 operation(s) for pedido.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Pedido
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-pedido-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
+- aid: madeiramadeira:madeiramadeira-produtos-api
+  name: Madeiramadeira Produtos API
+  description: The Produtos API from Madeiramadeira — 38 operation(s) for produtos.
+  humanURL: https://documenter.getpostman.com/view/3341659/RztmqU19
+  baseURL: https://marketplace.madeiramadeira.com.br
+  tags:
+  - Produtos
+  properties:
+  - type: OpenAPI
+    url: openapi/madeiramadeira-produtos-api-openapi.yml
+  - type: Postman
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Documentation
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: APIReference
+    url: https://documenter.getpostman.com/view/3341659/RztmqU19
+  - type: Authentication
+    url: authentication/madeiramadeira-authentication.yml
+  - type: ErrorCatalog
+    url: errors/madeiramadeira-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/madeiramadeira-marketplace-webhooks.yml
+  - type: Conventions
+    url: conventions/madeiramadeira-conventions.yml
+  - type: RateLimits
+    url: rate-limits/madeiramadeira-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/madeiramadeira-sandbox.yml
+  - type: DataModel
+    url: data-model/madeiramadeira-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/madeiramadeira-marketplace-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://www.madeiramadeira.com.br/
 - type: DeveloperPortal
