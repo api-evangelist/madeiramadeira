@@ -1,0 +1,402 @@
+openapi: 3.2.0
+info:
+  title: MadeiraMadeira Marketplace Categorias API
+  version: v1
+  summary: Seller-facing marketplace API for products, categories, stock, price, shipping tables, orders, financial entries and seller-buyer messaging.
+  description: 'Introdução
+
+
+    Bem-vindo ao Marketplace MadeiraMadeira!
+
+
+    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
+
+
+    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
+
+
+    Produtos: Cadastro, edição e detalhamento de seu catálogo.
+
+
+    Frete: Consulta para tabela de fretes e integração.
+
+
+    Estoque: Controle de disponibilidade e reposição em tempo real.
+
+
+    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
+
+
+    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
+
+
+    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
+
+
+    Autenticação
+
+
+    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
+
+
+    Devem ser enviados da seguinte forma:
+
+
+    Content-Type: application/json
+
+
+    TOKENMM: {{TOKEN}}
+
+
+    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
+
+
+    O token estará disponível no Portal Marketplace, menu Administração > Integração.
+
+
+    Códigos de erros
+
+
+    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
+
+
+    401 Ausência de um dos Tokens no header ou token não existe
+
+
+    403 Token revogado ou inválido
+
+
+    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
+
+
+    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
+
+
+    422 Produto com este EAN ou SKU já cadastrado para ser processado
+
+
+    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
+
+
+    Integração de frete
+
+
+    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
+
+
+    Integração de frete (Cálculo de frete através da plataforma do Seller)
+
+
+    Tabelas de frete na plataforma da MadeiraMadeira
+
+
+    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
+
+
+    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
+
+
+    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
+
+
+    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
+
+
+    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
+
+
+    Integração de Frete
+
+    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
+
+
+    Ambientes
+
+
+    Produção: https://marketplace.madeiramadeira.com.br
+
+
+    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
+
+
+    Substituir {{WMENV}} pelo Ambiente desejado
+
+
+    Limites de Requisições
+
+
+    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
+
+
+    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
+
+
+    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+  contact:
+    name: MadeiraMadeira Marketplace
+    url: https://www.madeiramadeira.com.br/marketplace
+  x-derived-from: Public Postman collection "Marketplace MadeiraMadeira" published by MadeiraMadeira (documenter.getpostman.com/view/3341659/RztmqU19)
+servers:
+- url: https://marketplace.madeiramadeira.com.br
+  description: Producao (production)
+- url: https://marketplace-sandbox.madeiramadeira.com.br
+  description: Sandbox
+security:
+- TOKENMM: []
+tags:
+- name: Categorias
+paths:
+  /v1/categoria/limit=100000&offset=0:
+    get:
+      operationId: consultaArvoreDeCategorias2
+      summary: Consulta árvore de categorias
+      tags:
+      - Categorias
+      description: Listar todas as categorias
+      responses:
+        '200':
+          description: Consulta árvore de categorias
+          content:
+            application/json:
+              example:
+                meta:
+                  count: '2378'
+                data:
+                - id_categoria: '1'
+                  id_nivel_1: '560'
+                  nivel_1: Aquecedor Solar
+                  id_nivel_2: '562'
+                  nivel_2: Coletor Solar / Placa
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1273'
+                  nome_completo_fc: Ar e Ventilação / Aquecedores de Água / Coletores Solares
+                  comissionamento: '19.99'
+                - id_categoria: '2'
+                  id_nivel_1: '560'
+                  nivel_1: Aquecedor Solar
+                  id_nivel_2: '563'
+                  nivel_2: Controlador Digital
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1275'
+                  nome_completo_fc: Ar e Ventilação / Aquecedores de Água / Controladores Digitais
+                  comissionamento: '19.99'
+                - id_categoria: '3'
+                  id_nivel_1: '560'
+                  nivel_1: Aquecedor Solar
+                  id_nivel_2: '561'
+                  nivel_2: Reservatório Térmico / Boiler
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1274'
+                  nome_completo_fc: Ar e Ventilação / Aquecedores de Água / Boilers
+                  comissionamento: '19.99'
+                - id_categoria: '4'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '1569'
+                  nivel_2: Aquecedores de Ambiente
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '805'
+                  nome_completo_fc: Aquecedor de Ambiente
+                  comissionamento: '19.99'
+                - id_categoria: '5'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '1438'
+                  nivel_2: Ar Condicionado
+                  id_nivel_3: '1582'
+                  nivel_3: Janela
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1986'
+                  nome_completo_fc: Ar e Ventilação / Ar Condicionado / Janela
+                  comissionamento: '19.99'
+                - id_categoria: '6'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '1438'
+                  nivel_2: Ar Condicionado
+                  id_nivel_3: '1442'
+                  nivel_3: Split
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1849'
+                  nome_completo_fc: Ar e Ventilação / Ar Condicionado / Split
+                  comissionamento: '19.99'
+                - id_categoria: '7'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '1438'
+                  nivel_2: Ar Condicionado
+                  id_nivel_3: '1579'
+                  nivel_3: Split Piso Teto
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1972'
+                  nome_completo_fc: Ar e Ventilação / Ar Condicionado / Split Piso Teto
+                  comissionamento: '19.99'
+                - id_categoria: '8'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '973'
+                  nivel_2: Circuladores de Ar
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1823'
+                  nome_completo_fc: Ar e Ventilação / Circuladores de Ar
+                  comissionamento: '19.99'
+                - id_categoria: '9'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '993'
+                  nivel_2: Cortinas de Ar
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1912'
+                  nome_completo_fc: Ar e Ventilação / Cortinas de Ar
+                  comissionamento: '19.99'
+                - id_categoria: '10'
+                  id_nivel_1: '836'
+                  nivel_1: Ar e Ventilação
+                  id_nivel_2: '837'
+                  nivel_2: Exaustores
+                  id_nivel_3: '0'
+                  nivel_3: ''
+                  id_nivel_4: '0'
+                  nivel_4: null
+                  id_nivel_5: '0'
+                  nivel_5: null
+                  id_nivel_6: '0'
+                  nivel_6: null
+                  id_nivel_7: '0'
+                  nivel_7: null
+                  fc_id: '1124'
+                  nome_completo_fc: Ar e Ventilação / Exaustores
+                  comissionamento: '19.99'
+                errors: []
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+        errors:
+          type: object
+          properties:
+            detail:
+              type: string
+      example:
+        meta:
+          count: 0
+        errors:
+          detail: Token not found
+  securitySchemes:
+    TOKENMM:
+      type: apiKey
+      in: header
+      name: TOKENMM
+      description: Seller token issued in the Portal Marketplace under Administracao > Integracao. Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token) via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.

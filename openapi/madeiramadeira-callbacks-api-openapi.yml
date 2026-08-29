@@ -1,0 +1,342 @@
+openapi: 3.2.0
+info:
+  title: MadeiraMadeira Marketplace Callbacks API
+  version: v1
+  summary: Seller-facing marketplace API for products, categories, stock, price, shipping tables, orders, financial entries and seller-buyer messaging.
+  description: 'Introdução
+
+
+    Bem-vindo ao Marketplace MadeiraMadeira!
+
+
+    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
+
+
+    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
+
+
+    Produtos: Cadastro, edição e detalhamento de seu catálogo.
+
+
+    Frete: Consulta para tabela de fretes e integração.
+
+
+    Estoque: Controle de disponibilidade e reposição em tempo real.
+
+
+    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
+
+
+    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
+
+
+    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
+
+
+    Autenticação
+
+
+    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
+
+
+    Devem ser enviados da seguinte forma:
+
+
+    Content-Type: application/json
+
+
+    TOKENMM: {{TOKEN}}
+
+
+    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
+
+
+    O token estará disponível no Portal Marketplace, menu Administração > Integração.
+
+
+    Códigos de erros
+
+
+    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
+
+
+    401 Ausência de um dos Tokens no header ou token não existe
+
+
+    403 Token revogado ou inválido
+
+
+    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
+
+
+    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
+
+
+    422 Produto com este EAN ou SKU já cadastrado para ser processado
+
+
+    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
+
+
+    Integração de frete
+
+
+    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
+
+
+    Integração de frete (Cálculo de frete através da plataforma do Seller)
+
+
+    Tabelas de frete na plataforma da MadeiraMadeira
+
+
+    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
+
+
+    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
+
+
+    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
+
+
+    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
+
+
+    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
+
+
+    Integração de Frete
+
+    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
+
+
+    Ambientes
+
+
+    Produção: https://marketplace.madeiramadeira.com.br
+
+
+    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
+
+
+    Substituir {{WMENV}} pelo Ambiente desejado
+
+
+    Limites de Requisições
+
+
+    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
+
+
+    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
+
+
+    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+  contact:
+    name: MadeiraMadeira Marketplace
+    url: https://www.madeiramadeira.com.br/marketplace
+  x-derived-from: Public Postman collection "Marketplace MadeiraMadeira" published by MadeiraMadeira (documenter.getpostman.com/view/3341659/RztmqU19)
+servers:
+- url: https://marketplace.madeiramadeira.com.br
+  description: Producao (production)
+- url: https://marketplace-sandbox.madeiramadeira.com.br
+  description: Sandbox
+security:
+- TOKENMM: []
+tags:
+- name: Callbacks
+paths:
+  /v1/callback:
+    get:
+      operationId: consultaUrlsDeCallbackCadastradas
+      summary: Consulta URLs de Callback cadastradas
+      tags:
+      - Callbacks
+      responses:
+        '200':
+          description: Consulta URLs de Callback cadastradas
+          content:
+            application/json:
+              example:
+                meta:
+                  count: 5
+                data:
+                - id_callback: '23'
+                  url: http://www.google.com.br/
+                  tipo: FRETE
+                  datahora_alteracao: '2018-06-01 17:13:44'
+                - id_callback: '18'
+                  url: http://www.google.com.br/
+                  tipo: PEDIDO
+                  datahora_alteracao: '2018-06-01 17:14:17'
+                - id_callback: '20'
+                  url: http://www.google.com.br/
+                  tipo: PEDIDO_NOVO
+                  datahora_alteracao: '0000-00-00 00:00:00'
+                - id_callback: '22'
+                  url: http://www.google.com.br/
+                  tipo: PEDIDO_CANCELADO
+                  datahora_alteracao: '0000-00-00 00:00:00'
+                - id_callback: '21'
+                  url: http://www.google.com.br/
+                  tipo: PEDIDO_APROVADO
+                  datahora_alteracao: '0000-00-00 00:00:00'
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+    post:
+      operationId: criaNovaUrlDeCallback
+      summary: Cria nova URL de callback
+      tags:
+      - Callbacks
+      description: 'Os tipos que podem ser criados são:
+
+
+        "FRETE" - URL a ser consultado frete na Integradora
+
+
+        "PEDIDO_NOVO" - Notificação de Pedidos Novos
+
+
+        "PEDIDO_APROVADO" - Notificação de Pedidos Aprovados
+
+
+        "PEDIDO_CANCELADO" - Notificação de Pedidos Cancelados
+
+
+        "PRODUTO_APROVADO" - Notificação quando um produto for Aprovado
+
+
+        Observação: Para alterar um callback existente, deve-se excluir o atual.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              tipo: PEDIDO_NOVO
+              url: http://www.google.com
+      responses:
+        '200':
+          description: Cria nova URL de callback
+          content:
+            application/json:
+              example: "PEDIDO CALLBACK\n{\n  \"id_seller\": \"225\",\n  \"order\": \"2371\",\n  \"status\": 1,\n  \"time\": 1532567027\n}"
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+      x-additional-examples:
+      - Cria nova URL de callback Produtos
+  /v1/callback/PEDIDO_NOVO:
+    delete:
+      operationId: deletarUmCallback
+      summary: Deletar um callback
+      tags:
+      - Callbacks
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+        errors:
+          type: object
+          properties:
+            detail:
+              type: string
+      example:
+        meta:
+          count: 0
+        errors:
+          detail: Token not found
+  securitySchemes:
+    TOKENMM:
+      type: apiKey
+      in: header
+      name: TOKENMM
+      description: Seller token issued in the Portal Marketplace under Administracao > Integracao. Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token) via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.

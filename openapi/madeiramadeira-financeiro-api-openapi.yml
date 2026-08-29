@@ -1,0 +1,256 @@
+openapi: 3.2.0
+info:
+  title: MadeiraMadeira Marketplace Financeiro API
+  version: v1
+  summary: Seller-facing marketplace API for products, categories, stock, price, shipping tables, orders, financial entries and seller-buyer messaging.
+  description: 'Introdução
+
+
+    Bem-vindo ao Marketplace MadeiraMadeira!
+
+
+    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
+
+
+    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
+
+
+    Produtos: Cadastro, edição e detalhamento de seu catálogo.
+
+
+    Frete: Consulta para tabela de fretes e integração.
+
+
+    Estoque: Controle de disponibilidade e reposição em tempo real.
+
+
+    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
+
+
+    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
+
+
+    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
+
+
+    Autenticação
+
+
+    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
+
+
+    Devem ser enviados da seguinte forma:
+
+
+    Content-Type: application/json
+
+
+    TOKENMM: {{TOKEN}}
+
+
+    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
+
+
+    O token estará disponível no Portal Marketplace, menu Administração > Integração.
+
+
+    Códigos de erros
+
+
+    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
+
+
+    401 Ausência de um dos Tokens no header ou token não existe
+
+
+    403 Token revogado ou inválido
+
+
+    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
+
+
+    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
+
+
+    422 Produto com este EAN ou SKU já cadastrado para ser processado
+
+
+    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
+
+
+    Integração de frete
+
+
+    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
+
+
+    Integração de frete (Cálculo de frete através da plataforma do Seller)
+
+
+    Tabelas de frete na plataforma da MadeiraMadeira
+
+
+    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
+
+
+    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
+
+
+    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
+
+
+    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
+
+
+    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
+
+
+    Integração de Frete
+
+    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
+
+
+    Ambientes
+
+
+    Produção: https://marketplace.madeiramadeira.com.br
+
+
+    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
+
+
+    Substituir {{WMENV}} pelo Ambiente desejado
+
+
+    Limites de Requisições
+
+
+    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
+
+
+    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
+
+
+    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+  contact:
+    name: MadeiraMadeira Marketplace
+    url: https://www.madeiramadeira.com.br/marketplace
+  x-derived-from: Public Postman collection "Marketplace MadeiraMadeira" published by MadeiraMadeira (documenter.getpostman.com/view/3341659/RztmqU19)
+servers:
+- url: https://marketplace.madeiramadeira.com.br
+  description: Producao (production)
+- url: https://marketplace-sandbox.madeiramadeira.com.br
+  description: Sandbox
+security:
+- TOKENMM: []
+tags:
+- name: Financeiro
+paths:
+  /v1/financeiro/lancamento/date_from={date_from}&date_to={date_to}&limit={limit}&offset={offset}&type=7:
+    get:
+      operationId: consultaLancamentoFinanceiroDeSaqueESeuDetalhamento
+      summary: Consulta lançamento financeiro de saque e seu detalhamento
+      tags:
+      - Financeiro
+      parameters:
+      - name: date_from
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: date_to
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Consulta lançamento financeiro de saque e seu detalhamento
+          content:
+            application/json:
+              example:
+                meta:
+                  count: 1
+                data:
+                - id_lancamento_financeiro: '5'
+                  id_pedido: null
+                  id_seller: '123'
+                  id_tipo_lancamento: '7'
+                  tipo_lancamento: Saque
+                  data: '2022-01-01'
+                  descricao: Saque
+                  valor: '-999.50'
+                  data_previsao_pagamento: '2022-01-05'
+                  data_pagamento: '2022-01-05'
+                  data_liberacao: '2022-01-05'
+                  detalhamento: '[{"data": "2021-01-01", "valor": "-0.50", "descricao": "Comissão", "id_pedido": "1", "pedido_pai": "1", "pedido_filho": "2", "data_liberacao": "2021-01-01", "id_tipo_lancamento": "3", "descricao_lancamento": null, "id_lancamento_financeiro": "1"}, {"data": "2021-01-01", "valor": "1000.00", "descricao": "Venda", "id_pedido": "1", "pedido_pai": "1", "pedido_filho": "2", "data_liberacao": "2021-01-01", "id_tipo_lancamento": "2", "descricao_lancamento": null, "id_lancamento_financeiro": "2"}]'
+                  status: Repassado
+                  ind_fatura_valida: '0'
+                errors: []
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+        errors:
+          type: object
+          properties:
+            detail:
+              type: string
+      example:
+        meta:
+          count: 0
+        errors:
+          detail: Token not found
+  securitySchemes:
+    TOKENMM:
+      type: apiKey
+      in: header
+      name: TOKENMM
+      description: Seller token issued in the Portal Marketplace under Administracao > Integracao. Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token) via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.

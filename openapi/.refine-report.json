@@ -1,0 +1,25 @@
+{
+  "provider": "madeiramadeira",
+  "sources": [
+    "madeiramadeira-marketplace-openapi.yml"
+  ],
+  "outputs": [
+    "madeiramadeira-callbacks-api-openapi.yml",
+    "madeiramadeira-categorias-api-openapi.yml",
+    "madeiramadeira-financeiro-api-openapi.yml",
+    "madeiramadeira-frete-api-openapi.yml",
+    "madeiramadeira-mensageria-api-openapi.yml",
+    "madeiramadeira-pedido-api-openapi.yml",
+    "madeiramadeira-produtos-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/madeiramadeira-marketplace-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "madeiramadeira-marketplace-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+7 apis, 7 total)"
+  ],
+  "skipped": []
+}

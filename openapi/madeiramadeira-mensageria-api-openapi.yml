@@ -1,0 +1,803 @@
+openapi: 3.2.0
+info:
+  title: MadeiraMadeira Marketplace Mensageria API
+  version: v1
+  summary: Seller-facing marketplace API for products, categories, stock, price, shipping tables, orders, financial entries and seller-buyer messaging.
+  description: 'Introdução
+
+
+    Bem-vindo ao Marketplace MadeiraMadeira!
+
+
+    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
+
+
+    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
+
+
+    Produtos: Cadastro, edição e detalhamento de seu catálogo.
+
+
+    Frete: Consulta para tabela de fretes e integração.
+
+
+    Estoque: Controle de disponibilidade e reposição em tempo real.
+
+
+    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
+
+
+    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
+
+
+    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
+
+
+    Autenticação
+
+
+    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
+
+
+    Devem ser enviados da seguinte forma:
+
+
+    Content-Type: application/json
+
+
+    TOKENMM: {{TOKEN}}
+
+
+    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
+
+
+    O token estará disponível no Portal Marketplace, menu Administração > Integração.
+
+
+    Códigos de erros
+
+
+    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
+
+
+    401 Ausência de um dos Tokens no header ou token não existe
+
+
+    403 Token revogado ou inválido
+
+
+    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
+
+
+    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
+
+
+    422 Produto com este EAN ou SKU já cadastrado para ser processado
+
+
+    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
+
+
+    Integração de frete
+
+
+    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
+
+
+    Integração de frete (Cálculo de frete através da plataforma do Seller)
+
+
+    Tabelas de frete na plataforma da MadeiraMadeira
+
+
+    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
+
+
+    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
+
+
+    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
+
+
+    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
+
+
+    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
+
+
+    Integração de Frete
+
+    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
+
+
+    Ambientes
+
+
+    Produção: https://marketplace.madeiramadeira.com.br
+
+
+    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
+
+
+    Substituir {{WMENV}} pelo Ambiente desejado
+
+
+    Limites de Requisições
+
+
+    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
+
+
+    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
+
+
+    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+  contact:
+    name: MadeiraMadeira Marketplace
+    url: https://www.madeiramadeira.com.br/marketplace
+  x-derived-from: Public Postman collection "Marketplace MadeiraMadeira" published by MadeiraMadeira (documenter.getpostman.com/view/3341659/RztmqU19)
+servers:
+- url: https://marketplace.madeiramadeira.com.br
+  description: Producao (production)
+- url: https://marketplace-sandbox.madeiramadeira.com.br
+  description: Sandbox
+security:
+- TOKENMM: []
+tags:
+- name: Mensageria
+paths:
+  /v1/mensageria/auth/generate-token:
+    post:
+      operationId: gerarToken
+      summary: Gerar token
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Autenticação
+      description: 'Gera um token JWT através do Keycloak usando o MMTOKEN (token do portal marketplace).
+
+
+        Autenticação: MMTOKEN (Header)
+
+
+        Fluxo:
+
+
+        Envia o MMTOKEN no header
+
+
+        Sistema chama Millennium Falcon para gerar JWT via Keycloak
+
+
+        Retorna o token JWT que será utilizado nas próximas requisições
+
+
+        Response:
+
+
+        access_token: Token JWT a ser usado nas requisições subsequentes
+
+
+        token_type: Tipo do token (geralmente "Bearer")
+
+
+        expires_in: Tempo de expiração do token em segundos
+
+
+        Variáveis de Ambiente:
+
+
+        {{base_url}}: URL base da API (ex: https://marketplace.madeiramadeira.com.br)
+
+
+        {{mm_token}}: Token do portal marketplace (MMTOKEN)'
+      responses:
+        '200':
+          description: Generate Token - Success
+          content:
+            application/json:
+              example:
+                data:
+                  access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  token_type: Bearer
+                  expires_in: 3600
+        '401':
+          description: Generate Token - Unauthorized
+          content:
+            application/json:
+              example:
+                error: Token não encontrado no contexto
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/mensageria/auth/revoke-token:
+    post:
+      operationId: revogarToken
+      summary: Revogar token
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Autenticação
+      description: 'Revoga um token JWT.
+
+
+        Autenticação: MMTOKEN (Header)
+
+
+        Payload:
+
+
+        token (string, obrigatório): O token JWT a ser revogado
+
+
+        Response:
+
+
+        Retorna status 200 se a revogação foi bem-sucedida
+
+
+        Exemplo de Uso:
+
+
+        Quando o usuário faz logout
+
+
+        Para invalidar tokens antigos ou de segurança
+
+
+        Após operações sensíveis que requerem re-autenticação'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              token: '{{token_mensageria}}'
+      responses:
+        '200':
+          description: Revoke Token - Success
+          content:
+            application/json:
+              example:
+                message: Token revogado com sucesso
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/mensageria/session:
+    post:
+      operationId: criarSessao
+      summary: Criar sessão
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Sessões
+      description: "Cria uma nova sessão de atendimento.\n\nAutenticação: Bearer Token\n\nPayload:\n\norder_id (string, obrigatório): ID único do pedido\n\nreason_id (integer, obrigatório): ID externo do motivo da sessão\n\nsubreason_id (integer, obrigatório quando o reason_id possui subreason)\n\ndescription (string, opcional): Descrição detalhada do problema\n\nRegras de Negócio:\n\nNão é permitido ter mais de uma sessão aberta por pedido\n\nSe já existe uma sessão aberta para este pedido, ela será retornada\n\nA sessão será criada com status \"1 - Aguardando sua resposta\"\n\nA sessão só pode ser aberta usando um dos seguintes reason_id e subreason_id\n\n206 - Insucesso de entrega\n\n410 - Aguardando retirada\n\n411 - Endereço errado\n\n412 - Cliente ausente\n\n208 - Confirmar dados entrega\n\nExemplo de response:\n\n{\n \"data\": {\n \"session_id\": 905,\n \"order_seller\": \"9346321\",\n \"order\": \"72021270\",\n \"order_hash\": \"69668d66ff2789b9ea1a3792\",\n \"child_order_hash\": \"69668d66ff2789b9ea1a3791\",\n \"order_date\": \"2026-01-13 12:22:38\",\n \"customer_name\": \"Vinicius Da Rocha Gomes\",\n \"status\": {\n \"id\": 1,\n \"description\": \"Aguardando Resposta\",\n \"slug\": \"awaiting_answer_seller\"\n },\n \"created_at\": \"2026-01-14 14:08:13\",\n \"expired_date\": \"\",\n \"reason\": {\n \"id\": 410,\n \"external_id\": 22,\n \"description\": \"Cancelamento de pedido/produto antes da entrega\",\n \"type\": \"Produto\",\n \"category\": \"Cancelar ou tirar dúvidas sobre cancelamento\",\n \"is_central_atendimento\": true,\n \"descricao_central_atendimento\": \"Cancelar produto que não foi entregue\",\n \"has_sub_reasons\": false\n },\n \"subreason_id\": 186,\n \"version\": 2,\n \"csat_id\": \"\"\n },\n \"new_session\": false\n}\n\ndata: Objeto da sessão criada\n\nsession_id: ID da sessão gerada\n\norder: Número do pedido\n\nstatus: Status inicial da sessão\n\nreason: Motivo da sessão\n\ncreated_at: Data de criação\n\nnew_session: Boolean indicando se é uma nova sessão ou se já existia\n\nStatus HTTP:\n\n201: Sessão criada ou já existia\n\n400: Erro de validação\n\n401: Token inválido\n\n500: Erro interno do servidor"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              order_id: '202412001'
+              reason_id: 101
+              description: Descrição detalhada do problema
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/seller/historic:
+    get:
+      operationId: historicoDeSessoes
+      summary: Histórico de sessões
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Sessões
+      description: "Retorna o histórico de sessões de um vendedor específico.\n\nAutenticação: Bearer Token\n\nQuery Parameters:\n\npage (integer, opcional): Página para paginação\n\nlimit (integer, opcional): Limite de registros\n\nstatus (integer, opcional): Filtrar por status:\n\n1 - Aguardando sua resposta\n\n2 - Aguardando o cliente\n\n3 - Finalizado\n\n4 - Mediado\n\n5 - Mediação finalizada\n\n6 - Atendimento com pendência\n\nResponse:\n\nArray de sessões com mesmo formato de \"Get Historic Sessions\"\n\nPaginação incluída\n\nExemplo de response:\n\n{\n \"data\": [\n {\n \"session_id\": 1122,\n \"order_seller\": \"9346817\",\n \"order\": \"72022580\",\n \"order_hash\": \"698dea60ef4d942b87396d08\",\n \"child_order_hash\": \"698dea60ef4d942b87396d07\",\n \"order_date\": \"2026-02-12 08:57:59\",\n \"customer_name\": \"TESTE QA AZION\",\n \"status\": {\n \"id\": 1,\n \"description\": \"Aguardando Resposta\",\n \"slug\": \"awaiting_answer_seller\"\n },\n \"created_at\": \"2026-02-12 16:38:21\",\n \"expired_date\": \"2026-02-19 16:38:30\",\n \"reason\": {\n \"id\": 590,\n \"external_id\": 211,\n \"description\": \"Tirar dúvidas sobre cancelamento\",\n \"type\": \"Produto\",\n \"category\": \"Cancelar ou tirar dúvidas sobre cancelamento\",\n \"is_central_atendimento\": true,\n \"descricao_central_atendimento\": \"Tirar dúvidas sobre cancelamento\",\n \"has_sub_reasons\": false\n },\n \"version\": 2,\n \"csat_id\": \"\"\n }\n ],\n \"pagination\": {\n \"total_count\": 519,\n \"count\": 1,\n \"page\": 1,\n \"lines\": 1\n }\n}\n\nDiferença do endpoint de Orders:\n\nEste é filtrado pelo vendedor autenticado\n\nRetorna apenas sessões do seu portfólio\n\nMais eficiente para dashboards do seller\n\nStatus HTTP:\n\n200: Histórico obtido com sucesso\n\n401: Token inválido"
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+        example: '1'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: string
+        example: '20'
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        example: '2'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/session/123456:
+    get:
+      operationId: sessaoPorId
+      summary: Sessão por ID
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Sessões
+      description: "GET /session/{session_id}\n\nRetorna os detalhes de uma sessão específica pelo ID.\n\nAutenticação\n\nBearer Token\n\nAuthorization: Bearer {token}\n\nParâmetros de Rota\n\nParâmetro\nTipo\nObrigatório\nDescrição\n\nsession_id\ninteger\nSim\nID único da sessão\n\nExemplo:\n\nGET /session/123456\n\nEstrutura da Resposta\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID único da sessão\n\nsource\nstring\nOrigem da sessão\n\norder_id\nstring\nNúmero do pedido no marketplace\n\norder_hash\nstring\nHash do pedido\n\nchild_order_hash\nstring\nHash do subpedido\n\nreason_id\ninteger\nID do motivo da sessão\n\norder_seller\nstring\nNúmero do pedido do seller\n\nstatus_id\ninteger\nID do status da sessão\n\nseller_id\ninteger\nID interno do seller\n\nbuyer_id\ninteger\nID interno do comprador\n\nlast_contact\ninteger\nTimestamp do último contato (Unix em milissegundos)\n\nlast_contact_role\nstring\nPapel do último contato (buyer, seller, attendant)\n\norder_date\nstring (ISO 8601)\nData do pedido\n\ncsat_id\nstring\nID do CSAT associado\n\nexpired_date\nstring\nData de expiração da sessão\n\nversion\ninteger\nVersão da sessão\n\ncreated_at\nstring (ISO 8601)\nData de criação\n\nupdated_at\nstring (ISO 8601)\nData da última atualização\n\nObjetos Aninhados\n\nStatus\n\nInformações do status atual da sessão.\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID do status\n\ndescription\nstring\nDescrição do status\n\nslug\nstring\nIdentificador do status\n\ncreated_at\nstring\nData de criação\n\nupdated_at\nstring\nData de atualização\n\nSeller\n\nInformações do vendedor.\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID interno\n\nexternal_id\nstring\nID externo do seller\n\nname\nstring\nNome do seller\n\nemail\nstring\nEmail do seller\n\nrole\nstring\nRole do usuário\n\ndocument\nstring\nDocumento do seller\n\nphone\nstring\nnull\n\napi_version\ninteger\nVersão da API\n\ncreated_at\nstring\nData de criação\n\nupdated_at\nstring\nData de atualização\n\nBuyer\n\nInformações do comprador.\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID interno\n\nexternal_id\nstring\nID externo\n\nname\nstring\nNome\n\nemail\nstring\nEmail\n\nrole\nstring\nRole do usuário\n\nphone\nstring\nnull\n\ncreated_at\nstring\nData de criação\n\nupdated_at\nstring\nData de atualização\n\nAttendant\n\nInformações do atendente da sessão.\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID interno\n\nexternal_id\nstring\nID externo\n\nname\nstring\nNome\n\nemail\nstring\nEmail\n\nrole\nstring\nRole\n\nphone\nstring\nnull\n\ncreated_at\nstring\nData de criação\n\nupdated_at\nstring\nData de atualização\n\nReason\n\nMotivo da abertura da sessão.\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID interno do motivo\n\nexternal_id\ninteger\nID externo do motivo\n\ndescription\nstring\nDescrição\n\nis_firstcall\nboolean\nIndica se é first call\n\nis_central_atendimento\nboolean\nIndica se é central de atendimento\n\nvisible_seller\nboolean\nVisível para seller\n\nvisible_customer\nboolean\nVisível para cliente\n\ncreated_at\nstring\nData de criação\n\nupdated_at\nstring\nData de atualização\n\nExemplo de Resposta\n\n{\n \"id\": 123456,\n \"source\": \"app\",\n \"order_id\": \"56827504\",\n \"order_hash\": \"67ae0fb0b73bc1d31f0f8eec\",\n \"child_order_hash\": \"67ae0fb0b73bc1d31f0f8eeb\",\n \"reason_id\": 567,\n \"order_seller\": \"8328522\",\n \"status_id\": 3,\n \"seller_id\": 8,\n \"buyer_id\": 23362,\n \"last_contact\": 1769716344961,\n \"last_contact_role\": \"seller\",\n \"order_date\": \"2025-02-13T09:28:58-03:00\",\n \"csat_id\": \"327808\",\n \"expired_date\": \"\",\n \"version\": 2,\n \"created_at\": \"2026-01-29T16:52:24-03:00\",\n \"updated_at\": \"2026-02-02T13:55:27-03:00\",\n \"Status\": {},\n \"Seller\": {},\n \"Buyer\": {},\n \"Attendant\": {},\n \"Reason\": {}\n}"
+      responses:
+        '200':
+          description: Get Session - Success
+          content:
+            application/json:
+              example:
+                data:
+                  session_id: 123456
+                  order: '202412001'
+                  order_seller: MM123456
+                  order_date: '2024-01-15T10:30:00Z'
+                  customer_name: João Silva
+                  status:
+                    id: 2
+                    description: Awaiting Answer - Seller
+                  reason:
+                    id: 1
+                    external_id: 101
+                    description: Dúvidas sobre Entrega
+                  expired_date: '2024-01-20T10:30:00Z'
+                  created_at: '2024-01-15T10:30:00Z'
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/session/awaiting_answer_seller/count:
+    get:
+      operationId: msgAguardandoResposta
+      summary: Msg aguardando resposta
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Sessões
+      description: "Retorna a quantidade de mensagens aguardando resposta do vendedor.\n\nAutenticação: Bearer Token\n\nQuery Parameters: Nenhum\n\nResponse:\n\ncount: Número inteiro de sessões com status \"Awaiting Answer - Seller\"\n\nExemplo de Resposta:\n\n{\n \"count\": 42\n}\n\nUso Comum:\n\nExibir badge de notificação no painel\n\nAlertar sobre sessões pendentes de resposta\n\nMonitorar workload do vendedor\n\nStatus HTTP:\n\n200: Contagem obtida com sucesso\n\n401: Token inválido"
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/message:
+    post:
+      operationId: enviarMensagem
+      summary: Enviar mensagem
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Mensagens
+      description: "Envia uma mensagem em uma sessão existente.\n\nAutenticação: Bearer Token\n\nHeaders:\nMMTOKEN: Token MM fornecido no portal marketplace\n\nPayload:\n\nsession_id (integer, obrigatório): ID da sessão\n\ntext (string, obrigatório): Conteúdo da mensagem (máximo 5000 caracteres)\n\ntype (string, obrigatório): Tipo da mensagem\n\ntext: Mensagem de texto\n\nimage: Imagem (JPEG, PNG até 5mb)\n\nreceived_at (ISO 8601 datetime, opcional): Data/hora da mensagem\n\nRegras de Negócio:\n\nA sessão deve existir e estar aberta\n\nNão é permitido enviar mensagens em sessões finalizadas ou em mediação\n\nMensagens são armazenadas no banco de dados\n\nMáximo 5000 caracteres por mensagem\n\nResponse:\n\nmessage: Indicação de que a mensagem foi enviada com sucesso.\n\nExemplo de Payload:\n\n{\n \"session_id\": 789012,\n \"text\": \"Olá! Qual é o status do meu pedido?\",\n \"type\": \"text\",\n \"received_at\": \"2024-01-15T10:35:00Z\"\n}\n\nExemplo de Response\n\n{\n \"message\": \"Mensagem encaminhada com sucesso\"\n}\n\nStatus HTTP:\n\n200: Mensagem enviada com sucesso\n\n400: Validação falhou\n\n404: Sessão não encontrada\n\n409: Sessão não permite mais mensagens\n\n401: Token inválido\n\n500: Erro ao enviar para Lambda"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              session_id: 123456
+              text: Sua mensagem aqui
+              type: text
+              received_at: 1787706288
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/orders/historic:
+    get:
+      operationId: mensagensPorOrderId
+      summary: Mensagens por order_id
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Mensagens
+      description: "GET /orders/historic\n\nRetorna o histórico de sessões (conversas) associadas a um ou mais pedidos.\n\nAs sessões são agrupadas por pedido e data de criação.\n\nAutenticação\n\nBearer Token\n\nAuthorization: Bearer {token}\n\nHeader adicional obrigatório:\n\nMMTOKEN: {marketplace-token}\n\nEndpoint\n\nGET /api/v1/orders/historic\n\nExemplo:\n\nGET /api/v1/orders/historic?orders=56827504\n\nQuery Parameters\n\nParâmetro\nTipo\nObrigatório\nDescrição\n\norders\nstring\nSim\nLista de IDs de pedidos separados por vírgula\n\nExemplo:\n\norders=56827504,56827505\n\nEstrutura da Resposta\n\nA resposta é um objeto onde cada chave representa um order_id.\n\nCada pedido contém:\n\norder_id\n └ sessions\n └ data\n └ array de sessões\n\nCampos da Sessão\n\nCampo\nTipo\nDescrição\n\nsession_id\ninteger\nID da sessão\n\norder_seller\nstring\nNúmero do pedido do seller\n\norder\nstring\nNúmero do pedido no marketplace\n\norder_hash\nstring\nHash do pedido\n\nchild_order_hash\nstring\nHash do subpedido\n\norder_date\nstring\nData do pedido\n\ncreated_at\nstring\nData de criação da sessão\n\nexpired_date\nstring\nData de expiração da sessão\n\nversion\ninteger\nVersão da sessão\n\ncsat_id\nstring\nID do CSAT associado\n\nObjeto Status\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID do status\n\ndescription\nstring\nDescrição do status\n\nslug\nstring\nIdentificador do status\n\nObjeto Reason\n\nCampo\nTipo\nDescrição\n\nid\ninteger\nID interno do motivo\n\nexternal_id\ninteger\nID externo\n\ndescription\nstring\nDescrição do motivo\n\ntype\nstring\nTipo do motivo\n\ncategory\nstring\nCategoria do motivo\n\nis_central_atendimento\nboolean\nIndica se é da central de atendimento\n\ndescricao_central_atendimento\nstring\nDescrição da central\n\nhas_sub_reasons\nboolean\nIndica se possui submotivos\n\nObjeto Message\n\nLista de mensagens da sessão.\n\nCampo\nTipo\nDescrição\n\nfrom\nstring\nNome do remetente\n\norigin\nstring\nOrigem da mensagem\n\nreceived_at\ninteger\nTimestamp em milissegundos\n\ntext\nstring\nConteúdo da mensagem\n\ntype\nstring\nTipo da mensagem\n\nrole\nstring\nPapel do usuário (buyer, seller, attendant)\n\ncreated_at\nstring\nData de criação da mensagem\n\nExemplo de Resposta\n\n{\n \"56827504\": {\n \"sessions\": {\n \"2026-02-04\": [\n {\n \"session_id\": 1052,\n \"order_seller\": \"9346538\",\n \"order\": \"72021868\",\n \"order_hash\": \"69836e0005c985b0105cd804\",\n \"child_order_hash\": \"69836e0005c985b0105cd802\",\n \"order_date\": \"2026-02-04 10:04:30\",\n \"status\": {\n \"id\": 1,\n \"description\": \"Aguardando Resposta\",\n \"slug\": \"awaiting_answer_seller\"\n },\n \"created_at\": \"2026-02-04 15:52:49\",\n \"expired_date\": \"2026-02-06 17:28:48\",\n \"reason\": {\n \"id\": 587,\n \"external_id\": 205,\n \"description\": \"Informar Novo Prazo de Entrega\",\n \"type\": \"\",\n \"category\": \"Falar sobre entrega\",\n \"is_central_atendimento\": false,\n \"descricao_central_atendimento\": \"\",\n \"has_sub_reasons\": false\n },\n \"version\": 2,\n \"csat_id\": \"\",\n \"messages\": [\n {\n \"from\": \"Vinicius Da Rocha Gomes\",\n \"origin\": \"infobip\",\n \"received_at\": 1770236918586,\n \"text\": \"Mensagem de teste\",\n \"type\": \"text\",\n \"role\": \"buyer\",\n \"created_at\": \"2026-02-04 17:28:48\"\n }\n ]\n }\n ]\n }\n }\n}\n\nStatus HTTP\n\nCódigo\nDescrição\n\n200\nHistórico obtido com sucesso\n\n401\nToken inválido ou ausente\n\n400\nParâmetro orders inválido"
+      parameters:
+      - name: orders
+        in: query
+        required: false
+        schema:
+          type: string
+        example: '56827504'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/uploads:
+    post:
+      operationId: uploadDeArquivo
+      summary: Upload de arquivo
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Anexos
+      description: "Descrição\n\nRealiza o upload completo de um arquivo em uma única requisição. O fluxo interno executa: presign (solicitação de URL assinada), upload no S3 e confirmação. Ideal para envio direto de arquivos sem etapas manuais.\n\nParâmetros obrigatórios\n\nfile (form-data): arquivo binário a ser enviado.\n\nAuthorization (header): Bearer token JWT.\n\nParâmetros opcionais (form-data)\n\norder_id: identificador do pedido. Se omitido, usa \"unknown\".\n\nroot_path: caminho raiz no bucket S3. Se omitido, usa \"mensageria-public-api\".\n\nExemplo de payload (form-data)\n\nKey\nType\nValue\n\nfile\nfile\n(seu arquivo .jpg/.png)\n\norder_id\ntext\n72021270\n\nroot_path\ntext\nmensageria-public-api\n\nExemplo de response (201 Created)\n\n{\n \"data\": {\n \"file_url\": \"https://bucket.s3.region.amazonaws.com/path/to/file?X-Amz-...\",\n \"s3_key\": \"mensageria-public-api/2026/02/72021270/arquivo.jpg\",\n \"file_name\": \"arquivo.jpg\",\n \"file_size\": 102400,\n \"upload_id\": \"550e8400-e29b-41d4-a716-446655440000\",\n \"created_at\": \"2026-03-09T12:00:00Z\"\n },\n \"message\": \"arquivo enviado com sucesso\"\n}\n\nExemplo de response de erro (400 Bad Request)\n\n{\n \"error\": \"arquivo não fornecido\",\n \"details\": \"http: no such file\"\n}"
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/uploads/download/{s3_key}:
+    get:
+      operationId: revalidarArquivo
+      summary: Revalidar arquivo
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Anexos
+      description: "Descrição\n\nObtém uma URL presignada renovada para download do arquivo armazenado no S3. Deve ser usado com o s3_key retornado no upload (endpoint \"Upload File Complete\"). A URL retornada é temporária e pronta para uso (ex.: redirecionamento ou download no front).\n\nParâmetros obrigatórios\n\ns3_key (path): chave do arquivo no S3, exatamente como retornada no upload (ex.: mensageria-public-api/2026/02/72021270/arquivo.jpg). Pode ser passada com ou sem barra inicial.\n\nAuthorization (header): Bearer token JWT (Keycloak).\n\nExemplo de URL\n\nGET /api/v1/uploads/download/mensageria-public-api/2026/02/72021270/arquivo.jpg\nExemplo de response (200 OK)\n\n{\n \"data\": {\n \"download_url\": \"https://bucket.s3.region.amazonaws.com/path/to/file?X-Amz-Algorithm=...&X-Amz-Credential=...&X-Amz-Date=...&X-Amz-Signature=...\"\n }\n}\n\nExemplo de response de erro (400 Bad Request)\n\n{\n \"error\": \"s3_key é obrigatório (use o s3_key retornado no upload)\"\n}\n\n{\n \"error\": \"erro ao obter URL de download\",\n \"details\": \"mensagem de erro detalhada\"\n}"
+      parameters:
+      - name: s3_key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/orders/shipping:
+    put:
+      operationId: atualizarCodigoDeRastreio
+      summary: Atualizar código de rastreio
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Pedidos
+      description: "Descrição\n\nAtualiza as informações de rastreio (link e código) no Warmachine e dispara o fluxo de mensageria automática para o comprador (Chat, WhatsApp e E-mail). Aceita atualizações em lote através de um array de pedidos.\n\nParâmetros obrigatórios\n\nid_pedido: Identificador interno do pedido (Warmachine).\n\nenvio (array): Lista contendo os dados de rastreio.\n\nAuthorization (header): Bearer token JWT.\n\nprevisao_entrega: Nova data de entrega no formato YYYY-MM-DD.\n\nsku: Código do produto vinculado ao envio.\n\nquantidade: Quantidade de itens enviados.\n\ndata_transportadora: Data em que o produto foi despachado.\n\nnome_transportadora: Nome da empresa responsável pela entrega.\n\nExemplo de payload (raw json)\n\n[\n {\n \"id_pedido\": 9675155,\n \"previsao_entrega\": \"2026-05-28\",\n \"envio\": [\n {\n \"sku\": \"674246422\",\n \"quantidade\": 1,\n \"data_transportadora\": \"2026-05-12\",\n \"codigo_rastreio\": \"BR123456789BR\",\n \"nome_transportadora\": \"Sedex\",\n \"url_rastreio\": \"https://track.correios.com.br/?CD=BR123456789BR\"\n }\n ]\n }\n]\n\nExemplo de response (200 OK)\n\n{\n \"meta\": {\n \"count\": 1\n },\n \"data\": [\n {\n \"type\": \"envio do pedido\",\n \"id\": 9675155,\n \"status\": 200\n }\n ],\n \"errors\": []\n}"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+            - id_pedido: 9675155
+              previsao_entrega: '2026-05-28'
+              envio:
+              - sku: '674246422'
+                quantidade: 1
+                data_transportadora: '2026-05-12'
+                codigo_rastreio: BR123456789BR
+                nome_transportadora: Sedex
+                url_rastreio: https://track.correios.com.br/?CD=BR123456789BR
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+  /v1/mensageria/orders/delivery:
+    put:
+      operationId: atualizarDataDeEntrega
+      summary: Atualizar data de entrega
+      tags:
+      - Mensageria
+      x-postman-folder: Mensageria / Pedidos
+      description: "Descrição\n\nRealiza a alteração da data de previsão de entrega no Warmachine (Exceção de Transporte) e dispara o fluxo de mensageria automática informando a nova data ao comprador. O pedido deve obrigatoriamente estar no status Enviado.\n\nParâmetros obrigatórios\n\nid_pedido: Identificador interno do pedido (Warmachine).\n\nprevisao_entrega: Nova data de entrega no formato YYYY-MM-DD.\n\nmotivo: Título amigável da alteração (Ex: \"Informar Nova Data de Entrega\").\n\nAuthorization (header): Bearer token JWT.\n\nParâmetros opcionais (JSON)\n\nmotivo_descricao: Detalhamento textual do motivo do atraso ou alteração.\n\nExemplo de payload (raw json)\n\n{\n \"id_pedido\": 9675155,\n \"previsao_entrega\": \"2026-06-25\",\n \"motivo\": \"Informar Nova Data de Entrega\",\n \"motivo_descricao\": \"Descrição detalhada do motivo da alteração\"\n}\n\nExemplo de response (200 OK)\n\n{\n \"data\": {\n \"saved\": 1,\n \"status\": 200\n },\n \"errors\": []\n}\n\nExemplo de response de erro (409 Conflict)\n\n{\n \"data\": [],\n \"errors\": [\n {\n \"id\": 9675155,\n \"type\": \"envio do pedido\",\n \"title\": \"Erro ao cadastrar\",\n \"detail\": \"Exceção de transporte é apenas para pedidos no status enviado\",\n \"status\": 409\n }\n ]\n}"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              id_pedido: 9675155
+              previsao_entrega: '2026-06-25'
+              motivo: Informar Nova Data de Entrega
+              motivo_descricao: Descrição detalhada do motivo da alteração
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - BearerJWT: []
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+        errors:
+          type: object
+          properties:
+            detail:
+              type: string
+      example:
+        meta:
+          count: 0
+        errors:
+          detail: Token not found
+  securitySchemes:
+    TOKENMM:
+      type: apiKey
+      in: header
+      name: TOKENMM
+      description: Seller token issued in the Portal Marketplace under Administracao > Integracao. Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token) via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.

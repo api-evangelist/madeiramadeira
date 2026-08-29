@@ -1,0 +1,1524 @@
+openapi: 3.2.0
+info:
+  title: MadeiraMadeira Marketplace Pedido API
+  version: v1
+  summary: Seller-facing marketplace API for products, categories, stock, price, shipping tables, orders, financial entries and seller-buyer messaging.
+  description: 'Introdução
+
+
+    Bem-vindo ao Marketplace MadeiraMadeira!
+
+
+    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
+
+
+    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
+
+
+    Produtos: Cadastro, edição e detalhamento de seu catálogo.
+
+
+    Frete: Consulta para tabela de fretes e integração.
+
+
+    Estoque: Controle de disponibilidade e reposição em tempo real.
+
+
+    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
+
+
+    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
+
+
+    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
+
+
+    Autenticação
+
+
+    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
+
+
+    Devem ser enviados da seguinte forma:
+
+
+    Content-Type: application/json
+
+
+    TOKENMM: {{TOKEN}}
+
+
+    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
+
+
+    O token estará disponível no Portal Marketplace, menu Administração > Integração.
+
+
+    Códigos de erros
+
+
+    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
+
+
+    401 Ausência de um dos Tokens no header ou token não existe
+
+
+    403 Token revogado ou inválido
+
+
+    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
+
+
+    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
+
+
+    422 Produto com este EAN ou SKU já cadastrado para ser processado
+
+
+    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
+
+
+    Integração de frete
+
+
+    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
+
+
+    Integração de frete (Cálculo de frete através da plataforma do Seller)
+
+
+    Tabelas de frete na plataforma da MadeiraMadeira
+
+
+    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
+
+
+    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
+
+
+    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
+
+
+    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
+
+
+    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
+
+
+    Integração de Frete
+
+    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
+
+
+    Ambientes
+
+
+    Produção: https://marketplace.madeiramadeira.com.br
+
+
+    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
+
+
+    Substituir {{WMENV}} pelo Ambiente desejado
+
+
+    Limites de Requisições
+
+
+    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
+
+
+    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
+
+
+    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+  contact:
+    name: MadeiraMadeira Marketplace
+    url: https://www.madeiramadeira.com.br/marketplace
+  x-derived-from: Public Postman collection "Marketplace MadeiraMadeira" published by MadeiraMadeira (documenter.getpostman.com/view/3341659/RztmqU19)
+servers:
+- url: https://marketplace.madeiramadeira.com.br
+  description: Producao (production)
+- url: https://marketplace-sandbox.madeiramadeira.com.br
+  description: Sandbox
+security:
+- TOKENMM: []
+tags:
+- name: Pedido
+paths:
+  /v1/pedido/id/49:
+    get:
+      operationId: consultaPedidoPorId
+      summary: Consulta pedido por ID
+      tags:
+      - Pedido
+      description: Consulta pedido por ID
+      responses:
+        '200':
+          description: Consulta pedido por ID
+          content:
+            application/json:
+              example:
+                meta:
+                  count: 1
+                data:
+                  id_pedido: '6051652'
+                  id_seller: '3'
+                  data_criacao: '2023-09-18 09:06:01'
+                  ultima_atualizacao: '2023-09-18 16:45:30'
+                  status: '7'
+                  skus:
+                  - sku: '1000221'
+                    nome: Mesa Para Computador Notebook Pc Gamer London P01 Preto Vermelho - NOME SELLER
+                    total: 341.91
+                    skuseller: COD_SKU
+                    quantidade: 1
+                    valor_unitario: 341.91
+                    frete: 104.7
+                    id_pedido_item: '6184000'
+                    madeira_envios: '0'
+                  comprador:
+                    uf: SC
+                    cep: '80230010'
+                    nome: NOME DO CLIENTE
+                    email: 18bdb38953e199698e09985a4c7724c9@madeiramadeira.com.br
+                    bairro: 'Centro '
+                    cidade: Curitiba
+                    numero: '289'
+                    telefone: '11998887778 / '
+                    documento: '12345678910'
+                    logradouro: 'Avenida Reginaldo mews '
+                    complemento: 'Casa roxa , depôs do bar '
+                    tipo_pessoa: F
+                  entrega: null
+                  dados_entrega:
+                    uf: SC
+                    cep: '80230010'
+                    nome: NOME DO CLIENTE
+                    bairro: 'Centro '
+                    cidade: Curitiba
+                    numero: '289'
+                    telefone: '11998887778 / '
+                    logradouro: 'Avenida Reginaldo mews '
+                    complemento: 'Casa roxa , depôs do bar '
+                  subtotal: '341.91'
+                  frete: '104.70'
+                  total: '446.61'
+                  pagamento:
+                  - tipo: Master
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: COD_SKU
+                    valor: '341.91'
+                    quantidade: '1.00000'
+                    chave_acesso: '41230918739399000192550010001349651701411422'
+                    data_emissao: 18/09/2023
+                    numero: '134965'
+                    url: https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=7PhJ+gAVw2g%3d&nfe=41230918739399000192550010001349651701411422
+                  envio:
+                  - sku: COD_SKU
+                    quantidade: 1
+                    url_rastreio: ''
+                    codigo_rastreio: '134965'
+                    data_transportadora: 18/09/2023
+                    nome_transportadora: TRANSPORTADORA
+                  pedido_wd: '36376398'
+                  comissao: '44.66'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-09-18 12:06:08'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-09-20'
+                  datahora_faturamento: '2023-09-18 15:19:20'
+                  data_previsao_rastreamento: '2023-09-20'
+                  datahora_rastreamento: '2023-09-18 15:19:20'
+                  datahora_entrega: null
+                  data_previsao_entrega: '2023-10-03'
+                  pedido_mm: '36376397'
+                  datahora_agendamento_saque: null
+                  id_lancamento_financeiro: '0'
+                  data_faturamento_seller: '2023-09-18'
+                  data_rastreamento_seller: '2023-09-18'
+                  data_entrega_seller: null
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-09-18 09:06:05'
+                  datahora_excecao_transporte: null
+                  madeira_envios:
+                  - 0
+                  cotacao_info:
+                  - sku: '1000221'
+                    id_cotacao: eJwEwDEOgzAMBdCrVH/+qmw3bZIrdGVEDE4CC4EBIbg+b8RlIFK2kEQEjJ/81fgzY0hUQiW8o4D4+zYvr+H0vfnRQFUaUW4Q1XsvXldMTwAAAP//yTsTvw==
+                    metodo_transporte_id: Jamef Standard
+                    metodo_transporte: Jamef Standard
+                    metodo_transporte_display: Jamef Standard
+                    estivativa_transporte_id: Jamef Standard_650b136f9048d
+                    id_madeira_envios_transportadora: null
+                    total: '104.70'
+                    prazo: 11
+                    expedicao: 2
+                    _source: callback
+                  fatura:
+                    ind_validade: '1'
+                  seller_informacoes:
+                  - nome: NOME SELLER
+                    razao_social: NOME SELLER MOVEIS EIRELI
+                    id_seller: '3'
+                    transportadora: NOME TRANSPORTADORA
+                    id_madeira_envios_transportadora: '2'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                  parcelas: '2'
+                  pagamento_fluxo: Cartão de crédito
+                  pagamento_detalhado:
+                  - id_pagamento: '1234897'
+                    metodo: Cartão de crédito
+                    parcelas: '1'
+                    valor: 446.61
+                  transportadoras: []
+                  nome_seller: NOME SELLER
+                errors: []
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/limit=15&offset=0:
+    get:
+      operationId: listaDeTodosOsPedidos
+      summary: Lista de todos os pedidos
+      tags:
+      - Pedido
+      description: Listar os pedidos, respeitando o limit e offset
+      responses:
+        '200':
+          description: lista de todos os pedidos
+          content:
+            application/json:
+              example:
+                meta:
+                  count: '4'
+                data:
+                - id_pedido: '5807775'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 10:26:05'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: SP
+                    cep: '13470231'
+                    nome: João Silva
+                    email: joao.silva@email.com
+                    bairro: Bairro A
+                    cidade: Cidade A
+                    numero: '123'
+                    telefone: '999999999'
+                    documento: '12345678901'
+                    logradouro: Rua A
+                    complemento: Apt 101
+                    tipo_pessoa: F
+                  entrega:
+                  - sku: SKU_28243
+                    usuario: Automático SSW
+                    quantidade: '1.00000'
+                    data_entrega: 10/08/2023
+                  dados_entrega:
+                    uf: SP
+                    cep: '13470231'
+                    nome: João Silva
+                    bairro: Bairro A
+                    cidade: Cidade A
+                    numero: '123'
+                    telefone: '999999999'
+                    logradouro: Rua A
+                    complemento: Apt 101
+                  subtotal: '640.71'
+                  frete: '143.45'
+                  total: '784.16'
+                  pagamento:
+                  - tipo: Master
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_28243
+                    url: https://linkdanfe.com.br/=35230818739399000435550010000042071993994772
+                    serie: '001'
+                    valor: 640.71
+                    numero: '000004207'
+                    quantidade: 1
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 03/08/2023
+                  envio:
+                  - sku: SKU_28243
+                    quantidade: 1
+                    url_rastreio: https://linkderastreio.com.br/35230818739399000435550010000042071993994772
+                    codigo_rastreio: '4207'
+                    data_transportadora: 03/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35327005'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 10:26:12'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-04'
+                  datahora_faturamento: '2023-08-03 09:11:51'
+                  data_previsao_rastreamento: '2023-08-04'
+                  datahora_rastreamento: '2023-08-03 09:11:51'
+                  datahora_entrega: '2023-08-10 16:22:47'
+                  data_previsao_entrega: '2023-08-25'
+                  pedido_mm: '35327004'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-03'
+                  data_rastreamento_seller: '2023-08-03'
+                  data_entrega_seller: '2023-08-10'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 10:26:10'
+                  skus:
+                  - sku: '965922756'
+                    nome: Produto A
+                    total: '640.71'
+                    skuseller: SKU_28243
+                    quantidade: '1.00000'
+                    valor_unitario: '640.71'
+                    frete: '143.45'
+                    id_pedido_item: '5931432'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '5807882'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 10:48:53'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: RS
+                    cep: '91550111'
+                    nome: Maria Santos
+                    email: maria.santos@email.com
+                    bairro: Bairro B
+                    cidade: Cidade B
+                    numero: '456'
+                    telefone: '999888777'
+                    documento: '98765432101'
+                    logradouro: Rua B
+                    complemento: Apt 202
+                    tipo_pessoa: J
+                  entrega:
+                  - sku: SKU_45627
+                    usuario: Automático SSW
+                    quantidade: '1.00000'
+                    data_entrega: 18/08/2023
+                  dados_entrega:
+                    uf: RS
+                    cep: '91550111'
+                    nome: Maria Santos
+                    bairro: Bairro B
+                    cidade: Cidade B
+                    numero: '456'
+                    telefone: '999888777'
+                    logradouro: Rua B
+                    complemento: Apt 202
+                  subtotal: '864.70'
+                  frete: '146.69'
+                  total: '1011.39'
+                  pagamento:
+                  - tipo: Visa
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_45627
+                    url: https://linkdanfe.com.br/=42230818739399000354550010000082611321302835
+                    serie: '001'
+                    valor: 864.7
+                    numero: 000008261
+                    quantidade: 1
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 11/08/2023
+                  envio:
+                  - sku: SKU_45627
+                    quantidade: 1
+                    url_rastreio: https://linkderastreio.com.br/42230818739399000354550010000082611321302835
+                    codigo_rastreio: '8261'
+                    data_transportadora: 11/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35327682'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 20:59:13'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-11'
+                  datahora_faturamento: '2023-08-14 08:24:43'
+                  data_previsao_rastreamento: '2023-08-11'
+                  datahora_rastreamento: '2023-08-14 08:24:43'
+                  datahora_entrega: '2023-08-18 16:12:38'
+                  data_previsao_entrega: '2023-08-22'
+                  pedido_mm: '35327678'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-11'
+                  data_rastreamento_seller: '2023-08-11'
+                  data_entrega_seller: '2023-08-18'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 10:48:57'
+                  skus:
+                  - sku: '307809486'
+                    nome: Produto B
+                    total: '864.70'
+                    skuseller: SKU_45627
+                    quantidade: '1.00000'
+                    valor_unitario: '864.70'
+                    frete: '146.69'
+                    id_pedido_item: '5931541'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '5808036'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 11:12:41'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: RJ
+                    cep: '22080010'
+                    nome: Ana Oliveira
+                    email: ana.oliveira@email.com
+                    bairro: Bairro C
+                    cidade: Cidade C
+                    numero: '789'
+                    telefone: '999777888'
+                    documento: '65432198701'
+                    logradouro: Rua C
+                    complemento: Apt 303
+                    tipo_pessoa: F
+                  entrega:
+                  - sku: SKU_39045
+                    usuario: Automático SSW
+                    quantidade: '4.00000'
+                    data_entrega: 21/08/2023
+                  dados_entrega:
+                    uf: RJ
+                    cep: '22080010'
+                    nome: Ana Oliveira
+                    bairro: Bairro C
+                    cidade: Cidade C
+                    numero: '789'
+                    telefone: '999777888'
+                    logradouro: Rua C
+                    complemento: Apt 303
+                  subtotal: '1999.60'
+                  frete: '281.84'
+                  total: '2281.44'
+                  pagamento:
+                  - tipo: Visa
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_39045
+                    url: https://linkdanfe.com.br/=42230818739399000354550010000082601174512477
+                    serie: '001'
+                    valor: 1999.6
+                    numero: 000008260
+                    quantidade: 4
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 11/08/2023
+                  envio:
+                  - sku: SKU_39045
+                    quantidade: 4
+                    url_rastreio: https://linkderastreio.com.br/42230818739399000354550010000082601174512477
+                    codigo_rastreio: '8260'
+                    data_transportadora: 11/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35328328'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 11:12:47'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-11'
+                  datahora_faturamento: '2023-08-14 08:26:51'
+                  data_previsao_rastreamento: '2023-08-11'
+                  datahora_rastreamento: '2023-08-14 08:26:52'
+                  datahora_entrega: '2023-08-21 16:12:07'
+                  data_previsao_entrega: '2023-08-25'
+                  pedido_mm: '35328327'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-11'
+                  data_rastreamento_seller: '2023-08-11'
+                  data_entrega_seller: '2023-08-21'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 11:12:46'
+                  skus:
+                  - sku: '492138887'
+                    nome: Produto C
+                    total: '1999.60'
+                    skuseller: SKU_39045
+                    quantidade: '4.00000'
+                    valor_unitario: '499.90'
+                    frete: '281.84'
+                    id_pedido_item: '5931700'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '6033246'
+                  id_seller: '3'
+                  data_criacao: '2023-09-14 07:39:04'
+                  ultima_atualizacao: '2023-09-20 01:12:22'
+                  status: '1'
+                  comprador:
+                    uf: SP
+                    cep: 07111080
+                    nome: João da Silva
+                    email: joao.silva@email.com
+                    bairro: Vila Camargos
+                    cidade: Guarulhos
+                    numero: '123'
+                    telefone: '1122334455 / '
+                    documento: '12345678901'
+                    logradouro: Rua das Flores
+                    complemento: Apt 101
+                    tipo_pessoa: F
+                  entrega: null
+                  dados_entrega:
+                    uf: SP
+                    cep: 07111080
+                    nome: João da Silva
+                    bairro: Vila Camargos
+                    cidade: Guarulhos
+                    numero: '123'
+                    telefone: '1122334455 / '
+                    logradouro: Rua das Flores
+                    complemento: Apt 101
+                  subtotal: '563.91'
+                  frete: '75.41'
+                  total: '639.32'
+                  pagamento:
+                  - tipo: Master
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento: null
+                  envio: null
+                  pedido_wd: '36295102'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: null
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: null
+                  datahora_faturamento: null
+                  data_previsao_rastreamento: null
+                  datahora_rastreamento: null
+                  datahora_entrega: null
+                  data_previsao_entrega: '2023-09-28'
+                  pedido_mm: '36295101'
+                  datahora_agendamento_saque: null
+                  id_lancamento_financeiro: '0'
+                  data_faturamento_seller: null
+                  data_rastreamento_seller: null
+                  data_entrega_seller: null
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-09-14 07:39:08'
+                  skus:
+                  - sku: '2256043'
+                    nome: Produto D
+                    total: '563.91'
+                    skuseller: SKU_15577
+                    quantidade: '1.00000'
+                    valor_unitario: '563.91'
+                    frete: '75.41'
+                    id_pedido_item: '6164875'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                errors: []
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/{status}/limit={limit}&offset={offset}:
+    get:
+      operationId: listaDePedidosPorStatus
+      summary: Lista de Pedidos por Status
+      tags:
+      - Pedido
+      description: 'Listar os pedidos novos, respeitando o limit e offset
+
+
+        Status aceitos:
+
+
+        "new" : Pedido Novo
+
+
+        "approved" : Pedido Aprovado
+
+
+        "received" : Pedido Recebido
+
+
+        "invoiced" : Pedido com Nota Fiscal Emitida
+
+
+        "shipped" : Pedido Enviado
+
+
+        "delivered" : Pedido Entregue
+
+
+        "cancelled": Pedido Cancelado'
+      parameters:
+      - name: status
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/from={from}&to={to}&limit={limit}&offset={offset}:
+    get:
+      operationId: listaTodosOsPedidosEntreDatas
+      summary: Lista todos os pedidos entre datas
+      tags:
+      - Pedido
+      description: "Listar os pedidos entre duas datas, respeitando o limit e offset. \nO formato da data deve ser: aaaa-mm-dd (ano-mês-dia)"
+      parameters:
+      - name: from
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: to
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lista todos os pedidos entre datas
+          content:
+            application/json:
+              example:
+                meta:
+                  count: '4'
+                data:
+                - id_pedido: '5807775'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 10:26:05'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: SP
+                    cep: '13470231'
+                    nome: João Silva
+                    email: joao.silva@email.com
+                    bairro: Bairro A
+                    cidade: Cidade A
+                    numero: '123'
+                    telefone: '999999999'
+                    documento: '12345678901'
+                    logradouro: Rua A
+                    complemento: Apt 101
+                    tipo_pessoa: F
+                  entrega:
+                  - sku: SKU_28243
+                    usuario: Automático SSW
+                    quantidade: '1.00000'
+                    data_entrega: 10/08/2023
+                  dados_entrega:
+                    uf: SP
+                    cep: '13470231'
+                    nome: João Silva
+                    bairro: Bairro A
+                    cidade: Cidade A
+                    numero: '123'
+                    telefone: '999999999'
+                    logradouro: Rua A
+                    complemento: Apt 101
+                  subtotal: '640.71'
+                  frete: '143.45'
+                  total: '784.16'
+                  pagamento:
+                  - tipo: Master
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_28243
+                    url: https://linkdanfe.com.br/=35230818739399000435550010000042071993994772
+                    serie: '001'
+                    valor: 640.71
+                    numero: '000004207'
+                    quantidade: 1
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 03/08/2023
+                  envio:
+                  - sku: SKU_28243
+                    quantidade: 1
+                    url_rastreio: https://linkderastreio.com.br/35230818739399000435550010000042071993994772
+                    codigo_rastreio: '4207'
+                    data_transportadora: 03/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35327005'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 10:26:12'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-04'
+                  datahora_faturamento: '2023-08-03 09:11:51'
+                  data_previsao_rastreamento: '2023-08-04'
+                  datahora_rastreamento: '2023-08-03 09:11:51'
+                  datahora_entrega: '2023-08-10 16:22:47'
+                  data_previsao_entrega: '2023-08-25'
+                  pedido_mm: '35327004'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-03'
+                  data_rastreamento_seller: '2023-08-03'
+                  data_entrega_seller: '2023-08-10'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 10:26:10'
+                  skus:
+                  - sku: '965922756'
+                    nome: Produto A
+                    total: '640.71'
+                    skuseller: SKU_28243
+                    quantidade: '1.00000'
+                    valor_unitario: '640.71'
+                    frete: '143.45'
+                    id_pedido_item: '5931432'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '5807882'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 10:48:53'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: RS
+                    cep: '91550111'
+                    nome: Maria Santos
+                    email: maria.santos@email.com
+                    bairro: Bairro B
+                    cidade: Cidade B
+                    numero: '456'
+                    telefone: '999888777'
+                    documento: '98765432101'
+                    logradouro: Rua B
+                    complemento: Apt 202
+                    tipo_pessoa: J
+                  entrega:
+                  - sku: SKU_45627
+                    usuario: Automático SSW
+                    quantidade: '1.00000'
+                    data_entrega: 18/08/2023
+                  dados_entrega:
+                    uf: RS
+                    cep: '91550111'
+                    nome: Maria Santos
+                    bairro: Bairro B
+                    cidade: Cidade B
+                    numero: '456'
+                    telefone: '999888777'
+                    logradouro: Rua B
+                    complemento: Apt 202
+                  subtotal: '864.70'
+                  frete: '146.69'
+                  total: '1011.39'
+                  pagamento:
+                  - tipo: Visa
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_45627
+                    url: https://linkdanfe.com.br/=42230818739399000354550010000082611321302835
+                    serie: '001'
+                    valor: 864.7
+                    numero: 000008261
+                    quantidade: 1
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 11/08/2023
+                  envio:
+                  - sku: SKU_45627
+                    quantidade: 1
+                    url_rastreio: https://linkderastreio.com.br/42230818739399000354550010000082611321302835
+                    codigo_rastreio: '8261'
+                    data_transportadora: 11/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35327682'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 20:59:13'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-11'
+                  datahora_faturamento: '2023-08-14 08:24:43'
+                  data_previsao_rastreamento: '2023-08-11'
+                  datahora_rastreamento: '2023-08-14 08:24:43'
+                  datahora_entrega: '2023-08-18 16:12:38'
+                  data_previsao_entrega: '2023-08-22'
+                  pedido_mm: '35327678'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-11'
+                  data_rastreamento_seller: '2023-08-11'
+                  data_entrega_seller: '2023-08-18'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 10:48:57'
+                  skus:
+                  - sku: '307809486'
+                    nome: Produto B
+                    total: '864.70'
+                    skuseller: SKU_45627
+                    quantidade: '1.00000'
+                    valor_unitario: '864.70'
+                    frete: '146.69'
+                    id_pedido_item: '5931541'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '5808036'
+                  id_seller: '3'
+                  data_criacao: '2023-08-02 11:12:41'
+                  ultima_atualizacao: '2023-09-01 03:01:45'
+                  status: '8'
+                  comprador:
+                    uf: RJ
+                    cep: '22080010'
+                    nome: Ana Oliveira
+                    email: ana.oliveira@email.com
+                    bairro: Bairro C
+                    cidade: Cidade C
+                    numero: '789'
+                    telefone: '999777888'
+                    documento: '65432198701'
+                    logradouro: Rua C
+                    complemento: Apt 303
+                    tipo_pessoa: F
+                  entrega:
+                  - sku: SKU_39045
+                    usuario: Automático SSW
+                    quantidade: '4.00000'
+                    data_entrega: 21/08/2023
+                  dados_entrega:
+                    uf: RJ
+                    cep: '22080010'
+                    nome: Ana Oliveira
+                    bairro: Bairro C
+                    cidade: Cidade C
+                    numero: '789'
+                    telefone: '999777888'
+                    logradouro: Rua C
+                    complemento: Apt 303
+                  subtotal: '1999.60'
+                  frete: '281.84'
+                  total: '2281.44'
+                  pagamento:
+                  - tipo: Visa
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento:
+                  - sku: SKU_39045
+                    url: https://linkdanfe.com.br/=42230818739399000354550010000082601174512477
+                    serie: '001'
+                    valor: 1999.6
+                    numero: 000008260
+                    quantidade: 4
+                    chave_acesso: '11111111111111111111111111111111111111111111'
+                    data_emissao: 11/08/2023
+                  envio:
+                  - sku: SKU_39045
+                    quantidade: 4
+                    url_rastreio: https://linkderastreio.com.br/42230818739399000354550010000082601174512477
+                    codigo_rastreio: '8260'
+                    data_transportadora: 11/08/2023
+                    nome_transportadora: SSW
+                  pedido_wd: '35328328'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: '2023-08-02 11:12:47'
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: '2023-08-11'
+                  datahora_faturamento: '2023-08-14 08:26:51'
+                  data_previsao_rastreamento: '2023-08-11'
+                  datahora_rastreamento: '2023-08-14 08:26:52'
+                  datahora_entrega: '2023-08-21 16:12:07'
+                  data_previsao_entrega: '2023-08-25'
+                  pedido_mm: '35328327'
+                  datahora_agendamento_saque: '2023-09-01 03:01:36'
+                  id_lancamento_financeiro: '14653556'
+                  data_faturamento_seller: '2023-08-11'
+                  data_rastreamento_seller: '2023-08-11'
+                  data_entrega_seller: '2023-08-21'
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-08-02 11:12:46'
+                  skus:
+                  - sku: '492138887'
+                    nome: Produto C
+                    total: '1999.60'
+                    skuseller: SKU_39045
+                    quantidade: '4.00000'
+                    valor_unitario: '499.90'
+                    frete: '281.84'
+                    id_pedido_item: '5931700'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                - id_pedido: '6033246'
+                  id_seller: '3'
+                  data_criacao: '2023-09-14 07:39:04'
+                  ultima_atualizacao: '2023-09-20 01:12:22'
+                  status: '1'
+                  comprador:
+                    uf: SP
+                    cep: 07111080
+                    nome: João da Silva
+                    email: joao.silva@email.com
+                    bairro: Vila Camargos
+                    cidade: Guarulhos
+                    numero: '123'
+                    telefone: '1122334455 / '
+                    documento: '12345678901'
+                    logradouro: Rua das Flores
+                    complemento: Apt 101
+                    tipo_pessoa: F
+                  entrega: null
+                  dados_entrega:
+                    uf: SP
+                    cep: 07111080
+                    nome: João da Silva
+                    bairro: Vila Camargos
+                    cidade: Guarulhos
+                    numero: '123'
+                    telefone: '1122334455 / '
+                    logradouro: Rua das Flores
+                    complemento: Apt 101
+                  subtotal: '563.91'
+                  frete: '75.41'
+                  total: '639.32'
+                  pagamento:
+                  - tipo: Master
+                  - tipo: creditorder
+                  - tipo: cashback
+                  faturamento: null
+                  envio: null
+                  pedido_wd: '36295102'
+                  comissao: '999.99'
+                  pesquisa_satisfacao: '0.00'
+                  datahora_confirmacao: null
+                  datahora_aprovacao: null
+                  datahora_cancelamento: null
+                  data_previsao_faturamento: null
+                  datahora_faturamento: null
+                  data_previsao_rastreamento: null
+                  datahora_rastreamento: null
+                  datahora_entrega: null
+                  data_previsao_entrega: '2023-09-28'
+                  pedido_mm: '36295101'
+                  datahora_agendamento_saque: null
+                  id_lancamento_financeiro: '0'
+                  data_faturamento_seller: null
+                  data_rastreamento_seller: null
+                  data_entrega_seller: null
+                  status_cliente_entrega: '0'
+                  hash_cliente_entrega: null
+                  data_hash_cliente_entrega: null
+                  ind_processado: '0'
+                  data_previsao_entrega_nova: null
+                  data_criacao_loja: '2023-09-14 07:39:08'
+                  skus:
+                  - sku: '2256043'
+                    nome: Produto D
+                    total: '563.91'
+                    skuseller: SKU_15577
+                    quantidade: '1.00000'
+                    valor_unitario: '563.91'
+                    frete: '75.41'
+                    id_pedido_item: '6164875'
+                    madeira_envios: '0'
+                  cnpj_intermediador: 10.490.181/0001-35
+                  cnpj_pagador: 10.490.181/0001-35
+                  parcelado: true
+                errors: []
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/new/limit={limit}&offset={offset}:
+    get:
+      operationId: novoConsultaListaDePedidosNovos
+      summary: 'NOVO: Consulta lista de pedidos novos'
+      tags:
+      - Pedido
+      description: Listar os pedidos novos, respeitando o limit e offset
+      parameters:
+      - name: limit
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: offset
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/received:
+    put:
+      operationId: recebidoNotificaQueVariosPedidosForamRecebidos
+      summary: 'RECEBIDO: Notifica que vários pedidos foram recebidos'
+      tags:
+      - Pedido
+      description: Notifica ao marketplace que uma lista de pedidos foi recebida pelo seller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+            - id_pedido: 1
+            - id_pedido: 654654
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/invoiced:
+    put:
+      operationId: nfEmitidaNotificaQueVariosPedidosTiveramNotaFiscalEmitida
+      summary: 'NF EMITIDA: Notifica que vários pedidos tiveram nota fiscal emitida'
+      tags:
+      - Pedido
+      description: 'Notifica ao marketplace que uma lista de pedidos tiveram Nota Fiscal (NF) emitida pelo Seller
+
+
+        O pedido deve estar no status 3 (APROVADO) para receber atualização de notificação de nota fiscal emitida
+
+
+        A data de emissão da Nota Fiscal (NF) não pode ser anterior a data de aprovação do pedido
+
+
+        A quantidade máxima de caracteres da Nota Fiscal (NF) é de 44 dígitos
+
+
+        O pedido com mais de um item e mais de uma quantidade precisa colocar o subtotal dos itens e repetir a mesma chave de nota fiscal se for uma única nota
+
+
+        Importante que o valor enviado por SKU seja o valor total dos Produtos, caso contrário o status do pedido não será alterado'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+            - id_pedido: 123
+              username: '123'
+              faturamento:
+              - sku: '123'
+                quantidade: 1
+                chave_acesso: 01234567890123456789012345678901234567890111
+                data_emissao: 26/02/2019
+                valor: 71.8
+                numero: 12312312
+                serie: 001A
+                url: https://www.google.com.br/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/shipped:
+    put:
+      operationId: enviadoNotificaQueVariosPedidosForamEnviados
+      summary: 'ENVIADO: Notifica que vários pedidos foram enviados'
+      tags:
+      - Pedido
+      description: 'Notifica ao Marketplace que uma lista de pedidos foi enviada ao cliente, pelo Seller
+
+
+        O pedido deve estar no status 6 (NF EMITIDA - FATURADO) para receber notificação de pedidos enviados
+
+
+        As informações precisam ser enviadas a nível de sku para que a atualização do pedido ocorra com êxito'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+            - id_pedido: 2657
+              envio:
+              - sku: '2277'
+                quantidade: 2
+                data_transportadora: 21/12/2017
+                codigo_rastreio: BR56465464564
+                nome_transportadora: CORREIOS
+                url_rastreio: http://rastreio.correios.com.br/?q=BR56465464564
+            - id_pedido: 2
+              envio:
+              - sku: s12354234523
+                quantidade: 2
+                data_transportadora: 21/12/2017
+                codigo_rastreio: BR56465464564
+                nome_transportadora: CORREIOS
+                url_rastreio: http://rastreio.correios.com.br/?q=BR56465464564
+            - id_pedido: 3
+              envio:
+              - sku: s12354234523
+                quantidade: 2
+                data_transportadora: 21/12/2017
+                codigo_rastreio: BR56465464564
+                nome_transportadora: CORREIOS
+                url_rastreio: http://rastreio.correios.com.br/?q=BR56465464564
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+  /v1/pedido/delivered:
+    put:
+      operationId: entregueNotificaQueVariosPedidosForamEntregues
+      summary: 'ENTREGUE: Notifica que vários pedidos foram entregues'
+      tags:
+      - Pedido
+      description: 'Notifica ao Marketplace que uma lista de pedidos foi entregue ao cliente, pelo Seller
+
+
+        O pedido deve estar no status 7 (ENVIADO) para receber notificação de pedidos entregues
+
+
+        As informações precisam ser enviadas a nível de sku para que a atualização do pedido ocorra com êxito
+
+
+        A data de faturamento (emissão da NF) não pode ser maior que a data de envio do pedido'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+            - id_pedido: 2657
+              entrega:
+              - sku: '2277'
+                quantidade: 2
+                data_entrega: 21/12/2017
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Erro no JSON enviado (verificar estrutura e enviar novamente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Ausencia de um dos tokens no header ou token nao existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Token revogado ou invalido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erro interno de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - TOKENMM: []
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+        errors:
+          type: object
+          properties:
+            detail:
+              type: string
+      example:
+        meta:
+          count: 0
+        errors:
+          detail: Token not found
+  securitySchemes:
+    TOKENMM:
+      type: apiKey
+      in: header
+      name: TOKENMM
+      description: Seller token issued in the Portal Marketplace under Administracao > Integracao. Bound to the seller account; requires a completed registration with signed Terms and Conditions.
+    BearerJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT issued by the Mensageria auth endpoint (POST /v1/mensageria/auth/generate-token) via Keycloak, exchanged for an MMTOKEN. Used by the Mensageria (messaging) surface.
