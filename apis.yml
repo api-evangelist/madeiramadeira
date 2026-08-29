@@ -13,6 +13,18 @@ description: >-
   for buyer-seller messaging, attachments and tracking updates. Order and product events are delivered
   to seller-registered callback URLs.
 url: https://raw.githubusercontent.com/api-evangelist/madeiramadeira/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 x-type: company
 x-source: harvest:secondary-market
