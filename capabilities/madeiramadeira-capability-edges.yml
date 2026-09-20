@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 1
+edge_count: 3
 edges:
 - tag: Pedido
   spec_file: madeiramadeira-pedido-api-openapi.yml
@@ -24,3 +24,27 @@ edges:
   reason: Operations retrieve marketplace orders and progress them through the fulfilment lifecycle (received,
     invoiced, shipped, delivered), which is order fulfilment orchestration rather than transport planning
     or billing.
+- tag: Produtos
+  spec_file: madeiramadeira-produtos-api-openapi.yml
+  capability_id: BC-2370
+  capability_id_l1: BC-2370
+  capability_name: Product Information Management
+  confidence: 0.8
+  evidence: 'POST /v1/produto ''Envia um ou mais produtos''; ''Produtos: Cadastro, edição e detalhamento
+    de seu catálogo''; GET /v1/categoria ''Consulta árvore de categorias'''
+  reason: Seller-facing endpoints to create, update and inspect product records (SKU, category tree, enrichment/approval
+    states) in the marketplace catalogue — this is product information/catalogue data management, not
+    order or inventory execution. Kept at L1 because the surface spans item creation, category taxonomy
+    and content enrichment rather than one narrow sub-capability.
+  recovered_from: vertical-retail-consumer-goods-edges.json
+- tag: Mensageria
+  spec_file: madeiramadeira-mensageria-api-openapi.yml
+  capability_id: BC-430.10
+  capability_id_l1: BC-430
+  capability_name: Customer Inquiry Management
+  confidence: 0.7
+  evidence: POST /v1/mensageria/message  enviarMensagem  Enviar mensagem ... GET /v1/mensageria/session/awaiting_answer_seller/count  msgAguardandoResposta
+  reason: Order-linked messaging sessions between marketplace buyer and seller, including messages awaiting
+    seller reply and updates of tracking code and delivery date — post-purchase customer inquiry handling.
+    Contains some auth/upload plumbing endpoints, hence moderate confidence.
+  recovered_from: vertical-retail-consumer-goods-edges.json
