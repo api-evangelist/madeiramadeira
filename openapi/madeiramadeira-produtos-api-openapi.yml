@@ -6,132 +6,7 @@ info:
   description: 'Introdução
 
 
-    Bem-vindo ao Marketplace MadeiraMadeira!
-
-
-    Estamos entusiasmados em tê-lo como parte do nosso ecossistema. Nosso objetivo é construir uma parceria sólida e impulsionar o crescimento mútuo. Juntos, alcançaremos novos patamares e proporcionaremos o melhor valor para nossos clientes.
-
-
-    Agora que sua integração inicial foi concluída, você está habilitado a utilizar nossa API pública para enviar e atualizar informações essenciais, como:
-
-
-    Produtos: Cadastro, edição e detalhamento de seu catálogo.
-
-
-    Frete: Consulta para tabela de fretes e integração.
-
-
-    Estoque: Controle de disponibilidade e reposição em tempo real.
-
-
-    Status de Pedidos: Atualização contínua do ciclo de vida dos pedidos.
-
-
-    Estamos à disposição para ajudá-lo com quaisquer dúvidas ou suporte técnico necessário. Vamos construir juntos uma experiência de sucesso!
-
-
-    Use nossa documentação de referência de API para criar soluções personalizadas adequadas ao seu negócio.
-
-
-    Autenticação
-
-
-    Todas as requisições para recursos da API devem conter o token de autorização presente no header da request.
-
-
-    Devem ser enviados da seguinte forma:
-
-
-    Content-Type: application/json
-
-
-    TOKENMM: {{TOKEN}}
-
-
-    O token de autenticação é vinculado ao cadastro do Seller no Marketplace MadeiraMadeira. Para obter o token de acesso é necessário que o cadastro na plataforma esteja realizado e os Termos e Condições estejam assinados.
-
-
-    O token estará disponível no Portal Marketplace, menu Administração > Integração.
-
-
-    Códigos de erros
-
-
-    400 Erro no JSON enviado (Verificar estrutura e enviar novamente)
-
-
-    401 Ausência de um dos Tokens no header ou token não existe
-
-
-    403 Token revogado ou inválido
-
-
-    404 Desculpe não atendemos sua região. (Quando o Seller não atende a região cotada para frete).
-
-
-    405 Método de requisição, inválido. (Quando um endpoint não aceita o método em questão)
-
-
-    422 Produto com este EAN ou SKU já cadastrado para ser processado
-
-
-    500 Erro interno de servidor, solicitar suporte para a equipe da Madeira Madeira
-
-
-    Integração de frete
-
-
-    Com o Marketplace MadeiraMadeira o Seller terá 2 opções de calculo de frete.
-
-
-    Integração de frete (Cálculo de frete através da plataforma do Seller)
-
-
-    Tabelas de frete na plataforma da MadeiraMadeira
-
-
-    A MadeiraMadeira poderá fazer o cálculo de frete para o Seller, utilizando as tabelas que você incluir em nossa plataforma.
-
-
-    O Seller poderá trabalhar apenas com uma ou várias tabelas de frete.
-
-
-    O Seller poderá cadastrar várias tabelas de frete informado no produto qual tabela que deseja utilizar no cálculo de frete.
-
-
-    Você poderá cadastrar e atualizar as tabelas de frete em qualquer momento através de nossa API.
-
-
-    É obrigatório ter uma tabela de "Contingência" para a loja do Seller ser liberada.
-
-
-    Integração de Frete
-
-    O Seller poderá utilizar sua plataforma para fazer o calculo de frete. A MadeiraMadeira exige um nível de disponibilidade de 85%, isso poderá ser consultado no Dashboard do Seller. O tempo máximo de resposta para o frete será de 1500 ms.
-
-
-    Ambientes
-
-
-    Produção: https://marketplace.madeiramadeira.com.br
-
-
-    Sandbox: https://marketplace-sandbox.madeiramadeira.com.br
-
-
-    Substituir {{WMENV}} pelo Ambiente desejado
-
-
-    Limites de Requisições
-
-
-    Para garantir a estabilidade e o desempenho de nossa API pública, implementamos mecanismos de validação que monitoram o consumo de nossos endpoints, essas medidas são projetadas para evitar o uso indevido e excessivo, promovendo uma experiência equilibrada para todos os usuários.
-
-
-    Em casos extremos, quando padrões de uso abusivo são detectados, podemos bloquear temporariamente as requisições por um curto período, essa ação é necessária para proteger a integridade da API e preservar o acesso de outros usuários
-
-
-    Existem limites de registros a serem retornados e/ou enviados por requisições GET/PUT/POST/DELETE'
+    Bem-vindo ao Marketplace MadeiraMadeira!'
   contact:
     name: MadeiraMadeira Marketplace
     url: https://www.madeiramadeira.com.br/marketplace
@@ -9719,11 +9594,47 @@ paths:
   /v1/produto/bulk:
     put:
       operationId: atualizacaoEmMassaDePrecoEstoqueStatusETabelaDeFreteDimensoesDeFrete
-      summary: Atualização em massa de Preço, Estoque, Status e Tabela de Frete, Dimensões de Frete
+      summary: Atualização em massa de Preço, Estoque, Status e Tabela de Frete, Dimensões de…
       tags:
       - Produtos
       x-postman-folder: Produtos / Aprovados / Publicados / Atualização em massa de Preço, Estoque, Status e Tabela de Frete
-      description: "Aqui é possível realizar alterações do produto já publicado. \n\nOs campos que podem ser alterados são:\n\npreco_de\n\npreco_por\n\nestoque\n\nstatus\n\ntipo_entrega\n\naltura\n\nlargura\n\nprofundidade\n\npeso\n\nprazo_expedicao\n\nNão é obrigatório o preenchimento de todos os campos, somente os que necessitam atualização."
+      description: 'Aqui é possível realizar alterações do produto já publicado.
+
+
+        Os campos que podem ser alterados são:
+
+
+        preco_de
+
+
+        preco_por
+
+
+        estoque
+
+
+        status
+
+
+        tipo_entrega
+
+
+        altura
+
+
+        largura
+
+
+        profundidade
+
+
+        peso
+
+
+        prazo_expedicao
+
+
+        Não é obrigatório o preenchimento de todos os campos, somente os que necessitam atualização.'
       requestBody:
         required: true
         content:
