@@ -293,6 +293,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: RateLimits
+  url: rate-limits/madeiramadeira-rate-limits.yml
 - type: CapabilityMap
   url: capabilities/madeiramadeira-capability-edges.yml
   name: Madeiramadeira Business Capability Map
