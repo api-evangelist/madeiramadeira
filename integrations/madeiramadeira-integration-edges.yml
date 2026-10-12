@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/madeiramadeira/integrations
+- https://n8n.io/integrations/madeiramadeira/
+- https://composio.dev/toolkits/madeiramadeira
+- https://monid.ai/tools/madeiramadeira
+checked:
+- https://composio.dev/toolkits/madeiramadeira
+- https://monid.ai/tools/madeiramadeira
+- https://n8n.io/integrations/madeiramadeira/
+- https://zapier.com/apps/madeiramadeira/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
