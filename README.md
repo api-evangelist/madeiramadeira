@@ -64,5 +64,129 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Madeiramadeira is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.hiive.com/securities/madeiramadeira-stock
+MadeiraMadeira (MadeiraMadeira Comercio Eletronico S/A, Curitiba, Parana) is one of Brazil's largest online retailers and marketplaces for home goods - furniture, decor, appliances, building materials, bathroom and kitchen fixtures, and planned furniture - selling direct and through a third-party seller marketplace. Its developer surface is the seller-facing Marketplace MadeiraMadeira API: a versioned REST API over HTTPS at marketplace.madeiramadeira.com.br with a matching sandbox host, authenticated with a seller-bound TOKENMM header token issued in the Portal Marketplace. It covers product catalog submission and enrichment lifecycle, the category tree, price, stock and status updates, shipping (frete) tables plus a seller-hosted shipping-quote callback, the full order lifecycle from new through invoiced, shipped and delivered, financial ledger entries, and a JWT-authenticated Mensageria surface for buyer-seller messaging, attachments and tracking updates. Order and product events are delivered to seller-registered callback URLs.
+
+**Areas:** Company · E-Commerce · Marketplace · Retail · Home Goods · Furniture · Brazil · Seller Integration · Product Catalog · Order · Shipping · Logistics
+
+## Madeiramadeira on APIs.io
+
+Everything profiled for Madeiramadeira is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/madeiramadeira/](https://apis.io/providers/madeiramadeira/)** — or go straight to one of the APIs or properties below.
+
+### APIs (7)
+
+- [Madeiramadeira Callbacks API](https://apis.io/apis/madeiramadeira/madeiramadeira-callbacks-api/) — The Callbacks API from Madeiramadeira — 2 operation(s) for callbacks.
+- [Madeiramadeira Categorias API](https://apis.io/apis/madeiramadeira/madeiramadeira-categorias-api/) — The Categorias API from Madeiramadeira — 1 operation(s) for categorias.
+- [Madeiramadeira Financeiro API](https://apis.io/apis/madeiramadeira/madeiramadeira-financeiro-api/) — The Financeiro API from Madeiramadeira — 1 operation(s) for financeiro.
+- [Madeiramadeira Frete API](https://apis.io/apis/madeiramadeira/madeiramadeira-frete-api/) — The Frete API from Madeiramadeira — 1 operation(s) for frete.
+- [Madeiramadeira Mensageria API](https://apis.io/apis/madeiramadeira/madeiramadeira-mensageria-api/) — The Mensageria API from Madeiramadeira — 12 operation(s) for mensageria.
+- [Madeiramadeira Pedido API](https://apis.io/apis/madeiramadeira/madeiramadeira-pedido-api/) — The Pedido API from Madeiramadeira — 9 operation(s) for pedido.
+- [Madeiramadeira Produtos API](https://apis.io/apis/madeiramadeira/madeiramadeira-produtos-api/) — The Produtos API from Madeiramadeira — 38 operation(s) for produtos.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Madeiramadeira Marketplace Webhooks](https://apis.io/asyncapis/madeiramadeira/madeiramadeira-marketplace-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [madeiramadeira-mcp.yml](https://apis.io/servers/madeiramadeira/madeiramadeira-mcp-yml/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Madeiramadeira Marketplace Overlay](https://apis.io/overlays/madeiramadeira/madeiramadeira-marketplace-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Madeiramadeira Authentication](https://apis.io/security/madeiramadeira/madeiramadeira-authentication/)
+- [Madeiramadeira Domain Security](https://apis.io/security/madeiramadeira/madeiramadeira-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Madeiramadeira Plans Pricing](https://apis.io/plans/madeiramadeira/madeiramadeira-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Madeiramadeira Rate Limits](https://apis.io/rate-limits/madeiramadeira/madeiramadeira-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.madeiramadeira.com.br/)
+- [Documentation](https://documenter.getpostman.com/view/3341659/RztmqU19)
+- [Getting started](https://www.madeiramadeira.com.br/marketplace)
+- [API reference](https://documenter.getpostman.com/view/3341659/RztmqU19)
+- [Sign up](https://www.madeiramadeira.com.br/verificar)
+- [Support](https://madeiramadeira.zendesk.com/hc/pt-br)
+- [Blog](https://parceiros.madeiramadeira.com.br/)
+- [Terms of service](https://www.madeiramadeira.com.br/termos)
+- [Privacy policy](https://www.madeiramadeira.com.br/termos-e-privacidade)
+- [GitHub](https://github.com/madeiramadeirabr)
+
+## API Evangelist rating
+
+**Kin Score 34.6** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 23.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 55.4 |
+| Access clarity | 34.2 |
+
+**Agent readiness 34.0** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/madeiramadeira/](https://apis.io/providers/madeiramadeira/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Madeiramadeira: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/madeiramadeira/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
